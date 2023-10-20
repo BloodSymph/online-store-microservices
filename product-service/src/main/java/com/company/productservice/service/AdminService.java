@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public interface AdminService {
-    List<CategoryAdminResponse> getAllCategories(int pageNumber, int pageSize);
+    Set<CategoryAdminResponse> getAllCategories(int pageNumber, int pageSize);
     CategoryAdminDetailResponse getCategoryDetails(String categoryUrl);
-    List<CategoryAdminResponse> searchCategories(String name);
+    Set<CategoryAdminResponse> searchCategories(String name);
     CategoryAdminResponse createCategory(CategoryRequest categoryRequest);
     CategoryAdminResponse updateCategory(CategoryRequest categoryRequest, String categoryUrl);
     void deleteCategory(String categoryUrl);
