@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase
@@ -47,7 +49,7 @@ class CategoryRepositoryTest {
         category2.setName("Test 2");
         category2.setUrl("test-url-2");
 
-        Set<CategoryEntity> categoryList = new HashSet<>();
+        List<CategoryEntity> categoryList = new ArrayList<>();
         categoryList.add(category1);
         categoryList.add(category2);
 
@@ -55,7 +57,7 @@ class CategoryRepositoryTest {
 
         String name = "test 2";
 
-        Set<CategoryEntity> result = categoryRepository.searchByNameIgnoreCase(name);
+        List<CategoryEntity> result = categoryRepository.searchByNameIgnoreCase(name);
 
         Assertions.assertThat(result).isNotEmpty();
     }

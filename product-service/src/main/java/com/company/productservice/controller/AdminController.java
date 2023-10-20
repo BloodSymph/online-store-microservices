@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class AdminController {
 
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    public Set<CategoryAdminResponse> getCategoryList(
+    public List<CategoryAdminResponse> getCategoryList(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize
     ) {
@@ -38,7 +37,7 @@ public class AdminController {
 
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
-    public Set<CategoryAdminResponse> searchCategoriesByName(
+    public List<CategoryAdminResponse> searchCategoriesByName(
             @RequestParam(value = "name") String name
     ) {
         return adminService.searchCategories(name);

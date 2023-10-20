@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.company.productservice.mapper.CategoryMapper.*;
@@ -28,13 +27,13 @@ public class AdminServiceImplementation implements AdminService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Set<CategoryAdminResponse> getAllCategories(int pageNumber, int pageSize) {
+    public List<CategoryAdminResponse> getAllCategories(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<CategoryEntity> categoryPage = categoryRepository.findAll(pageable);
         List<CategoryEntity> categoryEntityList = categoryPage.getContent();
         return categoryEntityList.stream()
                 .map(CategoryMapper::mapToCategoryAdminResponse)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -50,11 +49,11 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Set<CategoryAdminResponse> searchCategories(String name) {
-        Set<CategoryEntity> categories = categoryRepository.searchByNameIgnoreCase(name);
+    public List<CategoryAdminResponse> searchCategories(String name) {
+        List<CategoryEntity> categories = categoryRepository.searchByNameIgnoreCase(name);
         return categories.stream()
                 .map(CategoryMapper::mapToCategoryAdminResponse)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
