@@ -15,8 +15,8 @@ public interface AdminService {
     List<CategoryAdminResponse> getAllCategories(int pageNumber, int pageSize);
     CategoryAdminDetailResponse getCategoryDetails(String categoryUrl);
     List<CategoryAdminResponse> searchCategories(String name);
-    CategoryAdminResponse createCategory(CategoryRequest categoryRequest);
-    CategoryAdminResponse updateCategory(CategoryRequest categoryRequest, String categoryUrl);
+    CategoryRequest createCategory(CategoryRequest categoryRequest);
+    CategoryRequest updateCategory(CategoryRequest categoryRequest, String categoryUrl);
     void deleteCategory(String categoryUrl);
     List<BrandAdminResponse> getAllBrands(int pageNumber, int pageSize);
     BrandAdminDetailResponse getBrandDetails(String brandUrl);

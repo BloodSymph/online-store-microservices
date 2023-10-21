@@ -21,7 +21,9 @@ class CategoryRepositoryTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
     private CategoryEntity category;
+
     @BeforeEach
     void setUp() {
         category = CategoryEntity.builder()

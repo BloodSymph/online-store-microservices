@@ -25,24 +25,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @ExtendWith(MockitoExtension.class)
 class AdminServiceTest {
+
     @Mock
     private CategoryRepository categoryRepository;
+
     @Mock
     private BrandRepository brandRepository;
+
     @InjectMocks
     private AdminServiceImplementation adminServiceImplementation;
+
     private CategoryEntity category;
     private CategoryRequest categoryRequest;
     private BrandEntity brand;
 
     @BeforeEach
     void setUp() {
+
         category = CategoryEntity.builder()
                 .id(1L)
                 .name("Test")
@@ -55,10 +59,13 @@ class AdminServiceTest {
                 .name("Test")
                 .url("test")
                 .build();
+
     }
+
     @Test
     @DisplayName("Get all categories list and pagination test!")
     void AdminService_GetCategoryList_ReturnCategoryAdminResponse() {
+
         Page<CategoryEntity> categoryEntityPage = Mockito.mock(Page.class);
 
         Mockito.lenient().when(
@@ -71,11 +78,13 @@ class AdminServiceTest {
                 .getAllCategories(1, 10);
 
         Assertions.assertThat(categoryAdminResponses).isNotNull();
+
     }
 
     @Test
     @DisplayName("Get categories details by category url test!")
     void AdminService_GetCategoryDetail_ReturnCategoryAdminDetailResponse() {
+
         Mockito.lenient().when(
                 categoryRepository.findByUrlIgnoreCase(
                         "test"
@@ -86,11 +95,13 @@ class AdminServiceTest {
                 .getCategoryDetails("test");
 
         Assertions.assertThat(categoryAdminDetailResponse).isNotNull();
+
     }
 
     @Test
     @DisplayName("Search categories by name test!")
     void AdminService_SearchCategory_ReturnListOfCategoryAdminResponse() {
+
         Mockito.lenient().when(
                 categoryRepository.searchByNameIgnoreCase(
                         "Test"
@@ -101,24 +112,28 @@ class AdminServiceTest {
                 .searchCategories("Test");
 
         Assertions.assertThat(categoryAdminResponses).isNotNull();
+
     }
 
     @Test
     @DisplayName("Create category test!")
     void AdminService_CreateCategory_ReturnCategoryAdminResponse() {
+
         Mockito.lenient().when(
                 categoryRepository.save(Mockito.any(CategoryEntity.class))
         ).thenReturn(category);
 
-        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
+        CategoryRequest categoryAdminResponse = adminServiceImplementation
                 .createCategory(categoryRequest);
 
         Assertions.assertThat(categoryAdminResponse).isNotNull();
+
     }
 
     @Test
     @DisplayName("Update category test!")
     void AdminService_UpdateCategory_ReturnCategoryAdminResponse() {
+
         Mockito.lenient().when(
               categoryRepository.findByUrlIgnoreCase("test")
         ).thenReturn(Optional.of(category));
@@ -127,15 +142,17 @@ class AdminServiceTest {
                 categoryRepository.save(category)
         ).thenReturn(category);
 
-        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
+        CategoryRequest categoryAdminResponse = adminServiceImplementation
                 .updateCategory(categoryRequest, "test");
 
         Assertions.assertThat(categoryAdminResponse).isNotNull();
+
     }
 
     @Test
     @DisplayName("Delete category exception test!")
     void AdminService_DeleteCategory_ReturnCategoryNotFoundException() {
+
         Mockito.lenient().when(
                 categoryRepository.findByUrlIgnoreCase("test1")
         ).thenReturn(Optional.ofNullable(category));
@@ -144,5 +161,6 @@ class AdminServiceTest {
                 CategoryNotFoundException.class,
                 () -> adminServiceImplementation.deleteCategory("test1")
         );
+
     }
 }

@@ -44,10 +44,10 @@ public class CategoryMapper {
                 )
                 .build();
     }
-    public static CategoryEntity mapRequestToCategory(CategoryRequest categoryRequest) {
-        return CategoryEntity.builder()
-                .name(categoryRequest.getName())
-                .url(categoryRequest.getUrl())
+    public static CategoryRequest mapCategoryToRequest(CategoryEntity category) {
+        return CategoryRequest.builder()
+                .name(category.getName())
+                .url(category.getUrl())
                 .build();
     }
     public static CategoryProductsResponse mapToCategoryProductsResponse(CategoryEntity category) {

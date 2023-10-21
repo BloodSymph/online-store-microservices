@@ -66,15 +66,16 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public CategoryAdminResponse createCategory(CategoryRequest categoryRequest) {
-        CategoryEntity category = mapRequestToCategory(categoryRequest);
-        category.setUrl(toSlug(categoryRequest.getName()));
-        CategoryEntity createdCategory = categoryRepository.save(category);
-        return mapToCategoryAdminResponse(createdCategory);
+    public CategoryRequest createCategory(CategoryRequest categoryRequest) {
+        CategoryEntity category = new CategoryEntity();
+        category.setName(categoryRequest.getName());
+        category.setUrl(categoryRequest.getUrl());
+        CategoryEntity createCategory = categoryRepository.save(category);
+        return mapCategoryToRequest(createCategory);
     }
 
     @Override
-    public CategoryAdminResponse updateCategory(CategoryRequest categoryRequest, String categoryUrl) {
+    public CategoryRequest updateCategory(CategoryRequest categoryRequest, String categoryUrl) {
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
@@ -85,7 +86,7 @@ public class AdminServiceImplementation implements AdminService {
         category.setName(categoryRequest.getName());
         category.setUrl(toSlug(categoryRequest.getName()));
         CategoryEntity updatedCategory = categoryRepository.save(category);
-        return mapToCategoryAdminResponse(updatedCategory);
+        return mapCategoryToRequest(updatedCategory);
     }
 
     @Override
