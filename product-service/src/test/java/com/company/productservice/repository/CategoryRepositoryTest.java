@@ -2,95 +2,77 @@ package com.company.productservice.repository;
 
 import com.company.productservice.entity.CategoryEntity;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
-@AutoConfigureTestDatabase
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class CategoryRepositoryTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    private CategoryEntity category;
+    @BeforeEach
+    void setUp() {
+        category = CategoryEntity.builder()
+                .id(1L)
+                .name("Test")
+                .url("test")
+                .brands(new HashSet<>())
+                .products(new HashSet<>())
+                .build();
+    }
 
     @Test
     @DisplayName("Finding category by url test")
-    void findByUrlIgnoreCase() {
-        CategoryEntity category = new CategoryEntity();
-        category.setId(1L);
-        category.setName("Test");
-        category.setUrl("test-url");
-
+    void CategoryRepository_FindByUrlIgnoreCase_ReturnCategoryEntity() {
         categoryRepository.save(category);
 
-        String url = "test-url";
-
-        CategoryEntity result = categoryRepository.findByUrlIgnoreCase(url).get();
+        CategoryEntity result = categoryRepository.findByUrlIgnoreCase("test").get();
 
         Assertions.assertThat(result).isNotNull();
     }
 
     @Test
     @DisplayName("Search category by name test")
-    void searchByNameIgnoreCase() {
-        CategoryEntity category1 = new CategoryEntity();
-        category1.setId(1L);
-        category1.setName("Test");
-        category1.setUrl("test-url");
-
-        CategoryEntity category2 = new CategoryEntity();
-        category2.setId(2L);
-        category2.setName("Test 2");
-        category2.setUrl("test-url-2");
-
+    void CategoryRepository_SearchByUrlIgnoreCase_ReturnCategoryEntity() {
         List<CategoryEntity> categoryList = new ArrayList<>();
-        categoryList.add(category1);
-        categoryList.add(category2);
+
+        categoryList.add(category);
 
         categoryRepository.saveAll(categoryList);
 
-        String name = "test 2";
-
-        List<CategoryEntity> result = categoryRepository.searchByNameIgnoreCase(name);
+        List<CategoryEntity> result = categoryRepository.searchByNameIgnoreCase("test");
 
         Assertions.assertThat(result).isNotEmpty();
     }
 
     @Test
-    void deleteByUrlIgnoreCase() {
-        CategoryEntity category = new CategoryEntity();
-        category.setId(1L);
-        category.setName("Test");
-        category.setUrl("test-url");
-
+    @DisplayName("Category delete by url test!")
+    void CategoryRepository_DeleteByUrlIgnoreCase_ReturnNone() {
         categoryRepository.save(category);
 
-        String url = "test-url";
-
-        Optional<CategoryEntity> result = categoryRepository.deleteByUrlIgnoreCase(url);
+        Optional<CategoryEntity> result = categoryRepository.deleteByUrlIgnoreCase("test");
 
         Assertions.assertThat(result).isNotIn(category);
     }
 
     @Test
     @DisplayName("Category dose exists by url test")
-    void existsByUrlIgnoreCase() {
-        CategoryEntity category = new CategoryEntity();
-        category.setId(1L);
-        category.setName("Test");
-        category.setUrl("test-url");
-
+    void CategoryRepository_ExistsByUrlIgnoreCase_ReturnTrue() {
         categoryRepository.save(category);
 
-        String url = "test-url";
-
-        boolean result = categoryRepository.existsByUrlIgnoreCase(url);
+        boolean result = categoryRepository.existsByUrlIgnoreCase("test");
 
         Assertions.assertThat(result).isTrue();
     }
