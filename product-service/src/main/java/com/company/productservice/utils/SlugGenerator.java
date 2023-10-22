@@ -1,12 +1,12 @@
 package com.company.productservice.utils;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
 import java.text.Normalizer;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-@Component
+@UtilityClass
 public class SlugGenerator {
     private static final Pattern NON_LATIN = Pattern.compile("[^\\w-]");
     private static final Pattern WHITESPACE = Pattern.compile("[\\s]");

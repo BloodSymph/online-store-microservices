@@ -26,6 +26,7 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void setUp() {
+
         category = CategoryEntity.builder()
                 .id(1L)
                 .name("Test")
@@ -33,21 +34,25 @@ class CategoryRepositoryTest {
                 .brands(new HashSet<>())
                 .products(new HashSet<>())
                 .build();
+
     }
 
     @Test
     @DisplayName("Finding category by url test")
     void CategoryRepository_FindByUrlIgnoreCase_ReturnCategoryEntity() {
+
         categoryRepository.save(category);
 
         CategoryEntity result = categoryRepository.findByUrlIgnoreCase("test").get();
 
         Assertions.assertThat(result).isNotNull();
+
     }
 
     @Test
     @DisplayName("Search category by name test")
-    void CategoryRepository_SearchByUrlIgnoreCase_ReturnCategoryEntity() {
+    void CategoryRepository_SearchByUrlIgnoreCase_ReturnListCategoryEntities() {
+
         List<CategoryEntity> categoryList = new ArrayList<>();
 
         categoryList.add(category);
@@ -57,25 +62,30 @@ class CategoryRepositoryTest {
         List<CategoryEntity> result = categoryRepository.searchByNameIgnoreCase("test");
 
         Assertions.assertThat(result).isNotEmpty();
+
     }
 
     @Test
     @DisplayName("Category delete by url test!")
     void CategoryRepository_DeleteByUrlIgnoreCase_ReturnNone() {
+
         categoryRepository.save(category);
 
         Optional<CategoryEntity> result = categoryRepository.deleteByUrlIgnoreCase("test");
 
         Assertions.assertThat(result).isNotIn(category);
+
     }
 
     @Test
     @DisplayName("Category dose exists by url test")
     void CategoryRepository_ExistsByUrlIgnoreCase_ReturnTrue() {
+
         categoryRepository.save(category);
 
         boolean result = categoryRepository.existsByUrlIgnoreCase("test");
 
         Assertions.assertThat(result).isTrue();
+
     }
 }

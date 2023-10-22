@@ -1,5 +1,7 @@
 package com.company.productservice.service;
 
+import com.company.productservice.dto.brand.BrandAdminDetailResponse;
+import com.company.productservice.dto.brand.BrandAdminResponse;
 import com.company.productservice.dto.category.CategoryAdminDetailResponse;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
@@ -21,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +61,16 @@ class AdminServiceTest {
         categoryRequest = CategoryRequest.builder()
                 .name("Test")
                 .url("test")
+                .build();
+
+        brand = BrandEntity.builder()
+                .id(1L)
+                .name("Test")
+                .url("test")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .categories(new HashSet<>())
+                .products(new HashSet<>())
                 .build();
 
     }
@@ -123,7 +136,7 @@ class AdminServiceTest {
                 categoryRepository.save(Mockito.any(CategoryEntity.class))
         ).thenReturn(category);
 
-        CategoryRequest categoryAdminResponse = adminServiceImplementation
+        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
                 .createCategory(categoryRequest);
 
         Assertions.assertThat(categoryAdminResponse).isNotNull();
@@ -142,7 +155,7 @@ class AdminServiceTest {
                 categoryRepository.save(category)
         ).thenReturn(category);
 
-        CategoryRequest categoryAdminResponse = adminServiceImplementation
+        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
                 .updateCategory(categoryRequest, "test");
 
         Assertions.assertThat(categoryAdminResponse).isNotNull();
@@ -163,4 +176,53 @@ class AdminServiceTest {
         );
 
     }
+
+    @Test
+    @DisplayName("Get all brands list and pagination test!")
+    void AdminService_GetAllBrands_ReturnListBrandAdminResponse() {
+
+        Page<BrandEntity> brandEntityPage = Mockito.mock(Page.class);
+
+        Mockito.lenient().when(
+                brandRepository.findAll(
+                        Mockito.any(Pageable.class)
+                )
+        ).thenReturn(brandEntityPage);
+
+        List<BrandAdminResponse> brandAdminResponses = adminServiceImplementation
+                .getAllBrands(1, 10);
+
+        Assertions.assertThat(brandAdminResponses).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Get brand details by url test!")
+    void AdminService_GetBrandDetails_ReturnBrandAdminDetailResponse() {
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase(
+                        "test"
+                )
+        ).thenReturn(Optional.of(brand));
+
+        BrandAdminDetailResponse brandAdminDetailResponse = adminServiceImplementation
+                .getBrandDetails("test");
+
+        Assertions.assertThat(brandAdminDetailResponse).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Search brands by name test!")
+    void searchBrands() {
+
+
+
+    }
+
+    @Test
+    void deleteBrand() {
+    }
+
 }

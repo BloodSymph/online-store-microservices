@@ -7,6 +7,7 @@ import com.company.productservice.service.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -75,6 +76,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Get list of all categories test!")
     void AdminController_GetAllCategories_ReturnCategoryAdminResponse() throws Exception {
 
         Mockito.lenient().when(
@@ -92,6 +94,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Get details of current category test!")
     void AdminController_GetCategoryDetails_ReturnCategoryAdminDetailResponse() throws Exception {
 
         Mockito.lenient().when(
@@ -121,6 +124,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Search categories test!")
     void AdminController_SearchCategory_ReturnListCategoryAdminResponse() throws Exception {
 
         Mockito.lenient().when(
@@ -138,13 +142,12 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Create new category test!")
     void AdminController_CreateNewCategory_ReturnCreated() throws Exception {
 
-        given(
-                adminService.createCategory(ArgumentMatchers.any())
-        ).willAnswer(
-                invocationOnMock -> invocationOnMock.getArgument(0)
-        );
+        Mockito.lenient().when(
+                adminService.createCategory(categoryRequest)
+        ).thenReturn(categoryAdminResponse);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(
@@ -158,11 +161,12 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Update category test!")
     void AdminController_UpdateCategory_ReturnUpdated() throws Exception {
 
         Mockito.lenient().when(
                 adminService.updateCategory(categoryRequest, "test")
-        ).thenReturn(categoryRequest);
+        ).thenReturn(categoryAdminResponse);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put(
@@ -176,6 +180,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @DisplayName("Delete category test!")
     void AdminController_DeleteCategory_ReturnResponseEntity() throws Exception {
 
         Mockito.lenient().doNothing().when(adminService).deleteCategory("test");

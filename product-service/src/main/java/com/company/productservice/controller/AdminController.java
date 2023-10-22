@@ -48,7 +48,7 @@ public class AdminController {
 
     @PostMapping("/categories/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryRequest createNewCategory(
+    public CategoryAdminResponse createNewCategory(
             @Valid @RequestBody CategoryRequest categoryRequest
     ) {
         return adminService.createCategory(categoryRequest);
@@ -56,7 +56,7 @@ public class AdminController {
 
     @PutMapping("/categories/{categoryUrl}/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryRequest updateCategory(
+    public CategoryAdminResponse updateCategory(
             @PathVariable(value = "categoryUrl") String categoryUrl,
             @Valid @RequestBody CategoryRequest categoryRequest
     ) {
