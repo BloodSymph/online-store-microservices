@@ -2,6 +2,7 @@ package com.company.productservice.exception.handler;
 
 import com.company.productservice.exception.BrandNotFoundException;
 import com.company.productservice.exception.CategoryNotFoundException;
+import com.company.productservice.exception.ProductNotFoundException;
 import com.company.productservice.exception.object.ErrorObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BrandNotFoundException.class)
     public ResponseEntity<ErrorObject> handleBrandNotFoundException(
         BrandNotFoundException exception
+    ) {
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(exception.getMessage());
+        errorObject.setTimestamp(new Date());
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleProductNotFoundException(
+            ProductNotFoundException exception
     ) {
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());

@@ -7,6 +7,7 @@ import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.entity.BrandEntity;
 import com.company.productservice.entity.CategoryEntity;
+import com.company.productservice.exception.BrandNotFoundException;
 import com.company.productservice.exception.CategoryNotFoundException;
 import com.company.productservice.repository.BrandRepository;
 import com.company.productservice.repository.CategoryRepository;
@@ -108,6 +109,23 @@ class AdminServiceTest {
                 .getCategoryDetails("test");
 
         Assertions.assertThat(categoryAdminDetailResponse).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Get categories details exception by category url test!")
+    void AdminService_GetCategoryDetail_ThrowException() {
+
+        Mockito.lenient().when(
+                categoryRepository.findByUrlIgnoreCase(
+                        "test"
+                )
+        ).thenReturn(Optional.of(category));
+
+        assertThrows(
+                CategoryNotFoundException.class,
+                () -> adminServiceImplementation.getCategoryDetails("test1")
+        );
 
     }
 
@@ -214,15 +232,52 @@ class AdminServiceTest {
     }
 
     @Test
-    @DisplayName("Search brands by name test!")
-    void searchBrands() {
+    @DisplayName("Get brand details exception by url test!")
+    void AdminService_GetBrandDetails_ThrowException() {
 
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase(
+                        "test"
+                )
+        ).thenReturn(Optional.of(brand));
 
+        assertThrows(
+                BrandNotFoundException.class,
+                () -> adminServiceImplementation.getBrandDetails("test1")
+        );
 
     }
 
     @Test
-    void deleteBrand() {
+    @DisplayName("Search brands by name test!")
+    void searchBrands() {
+
+        Mockito.lenient().when(
+                brandRepository.searchByNameIgnoreCase("test")
+        ).thenReturn(List.of(brand));
+
+        List<BrandAdminResponse> brandAdminResponse = adminServiceImplementation.searchBrands("test");
+
+        Assertions.assertThat(brandAdminResponse).isNotEmpty();
+
+    }
+    // TODO: 23.10.2023 Create brand test
+    // TODO: 23.10.2023 Update brand test
+
+    @Test
+    @DisplayName("Delete brand exception test!")
+    void AdminService_DeleteBrandByUrl_ThrowException() {
+
+        Mockito.lenient().when(
+            brandRepository.findByUrlIgnoreCase("test")
+        ).thenReturn(Optional.ofNullable(brand));
+
+
+        assertThrows(
+                BrandNotFoundException.class,
+                () -> adminServiceImplementation.deleteBrand("test1")
+        );
+
     }
 
 }
