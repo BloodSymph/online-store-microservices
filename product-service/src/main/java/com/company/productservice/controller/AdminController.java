@@ -1,6 +1,7 @@
 package com.company.productservice.controller;
 
 import com.company.productservice.dto.brand.BrandAdminResponse;
+import com.company.productservice.dto.brand.BrandRequest;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.service.AdminService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,20 +30,28 @@ public class AdminController {
         return adminService.getAllCategories(pageNumber, pageSize);
     }
 
-    @GetMapping("/categories/{categoryUrl}")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryAdminDetailResponse getCategoryDetails(
-            @PathVariable(value = "categoryUrl") String categoryUrl
-    ) {
-        return adminService.getCategoryDetails(categoryUrl);
-    }
-
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryAdminResponse> searchCategoriesByName(
             @RequestParam(value = "name") String name
     ) {
         return adminService.searchCategories(name);
+    }
+
+    @GetMapping("/categories/{categoryUrl}/details")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryAdminResponse getCategoryDetails(
+            @PathVariable(value = "categoryUrl") String categoryUrl
+    ) {
+        return adminService.getSingleCategory(categoryUrl);
+    }
+
+    @GetMapping("/categories/{categoryUrl}/brands")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BrandAdminResponse> getBrandsByCategory(
+            @PathVariable(value = "categoryUrl") String categoryUrl
+    ) {
+        return adminService.getSetOfBrandsByCategory(categoryUrl);
     }
 
     @PostMapping("/categories/create")
@@ -79,12 +89,20 @@ public class AdminController {
         return adminService.getAllBrands(pageNumber, pageSize);
     }
 
-    @GetMapping("/brands/{brandUrl}")
+    @GetMapping("/brands/{brandUrl}/details")
     @ResponseStatus(HttpStatus.OK)
-    public BrandAdminDetailResponse getBrandDetails(
-            @PathVariable(value = "brandUrl") String brandUrl
+    public BrandAdminResponse getBrandDetails(
+            @PathVariable("brandUrl") String brandUrl
     ) {
-        return adminService.getBrandDetails(brandUrl);
+        return adminService.getSingleBrand(brandUrl);
+    }
+
+    @GetMapping("/brands/{brandUrl}/categories")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<CategoryAdminResponse> getCategoriesByBrand(
+            @PathVariable("brandUrl") String brandUrl
+    ) {
+        return adminService.getSetOfCategoriesByBrand(brandUrl);
     }
 
     @GetMapping("/brands/search")
@@ -94,8 +112,24 @@ public class AdminController {
     ) {
         return adminService.searchBrands(name);
     }
-    // TODO: 21.10.2023 Create Brand
-    // TODO: 21.10.2023 Update Brand
+
+    @PostMapping("/categories/{categoryUrl}/brands/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BrandAdminResponse createBrand(
+            @RequestBody BrandRequest brandRequest,
+            @PathVariable(value = "categoryUrl") String categoryUrl
+    ) {
+        return adminService.createBrand(brandRequest, categoryUrl);
+    }
+
+    @PutMapping("/brands/{brandUrl}/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BrandAdminResponse updateBrand(
+            @RequestBody BrandRequest brandRequest,
+            @PathVariable("brandUrl") String brandUrl
+    ) {
+        return adminService.updateBrand(brandRequest, brandUrl);
+    }
 
     @DeleteMapping("/brands/{brandUrl}/delete")
     @ResponseStatus(HttpStatus.OK)

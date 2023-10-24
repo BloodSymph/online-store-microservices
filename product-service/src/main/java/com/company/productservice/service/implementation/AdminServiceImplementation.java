@@ -19,9 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.company.productservice.mapper.BrandMapper.mapRequestToBrandEntity;
+import static com.company.productservice.mapper.BrandMapper.mapToBrandAdminResponse;
 import static com.company.productservice.mapper.CategoryMapper.*;
 import static com.company.productservice.utils.SlugGenerator.toSlug;
 
@@ -49,6 +53,24 @@ public class AdminServiceImplementation implements AdminService {
         return categories.stream()
                 .map(CategoryMapper::mapToCategoryAdminResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryAdminResponse getSingleCategory(String categoryUrl) {
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(categoryUrl)
+                .orElseThrow(
+                        () -> new CategoryNotFoundException("Can not found category by current url: " + categoryUrl)
+                );
+        return mapToCategoryAdminResponse(category);
+    }
+
+    @Override
+    public Set<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl) {
+        Set<CategoryEntity> categories = categoryRepository.findCategoryEntitiesByBrands_UrlIgnoreCase(brandUrl);
+        return categories.stream()
+                .map(CategoryMapper::mapToCategoryAdminResponse)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -104,13 +126,57 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    public BrandAdminResponse getSingleBrand(String brandUrl) {
+        BrandEntity brand = brandRepository
+                .findByUrlIgnoreCase(brandUrl)
+                .orElseThrow(
+                        () -> new BrandNotFoundException("Can not found brand by current url: " + brandUrl)
+                );
+        return mapToBrandAdminResponse(brand);
+    }
+
+    @Override
+    public Set<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl) {
+        Set<BrandEntity> brands = brandRepository.findBrandEntitiesByCategories_UrlIgnoreCase(categoryUrl);
+        return brands.stream()
+                .map(BrandMapper::mapToBrandAdminResponse)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public BrandAdminResponse createBrand(BrandRequest brandRequest, String categoryUrl) {
-        return null;
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(categoryUrl)
+                .orElseThrow(
+                        ()-> new CategoryNotFoundException(
+                                "Can not find category with current url: " + categoryUrl
+                        )
+                );
+
+        Set<CategoryEntity> categoryEntitySet = new HashSet<>();
+        categoryEntitySet.add(category);
+
+        BrandEntity brand = mapRequestToBrandEntity(brandRequest);
+        brand.setName(brandRequest.getName());
+        brand.setUrl(toSlug(brandRequest.getName()));
+        brand.setCategories(categoryEntitySet);
+
+        BrandEntity newBrand = brandRepository.save(brand);
+
+        return mapToBrandAdminResponse(newBrand);
     }
 
     @Override
     public BrandAdminResponse updateBrand(BrandRequest brandRequest, String brandUrl) {
-        return null;
+        BrandEntity brand = brandRepository
+                .findByUrlIgnoreCase(brandUrl)
+                .orElseThrow(
+                        () -> new BrandNotFoundException("Can not update brand by current url: " + brandUrl)
+                );
+        brand.setName(brandRequest.getName());
+        brand.setUrl(toSlug(brandRequest.getName()));
+        BrandEntity updatedBrand = brandRepository.save(brand);
+        return mapToBrandAdminResponse(updatedBrand);
     }
 
     @Override
