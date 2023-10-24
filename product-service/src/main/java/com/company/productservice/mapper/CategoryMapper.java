@@ -23,56 +23,13 @@ public class CategoryMapper {
                 .updatedAt(category.getUpdatedAt())
                 .build();
     }
-    public static CategoryAdminDetailResponse mapToCategoryAdminDetailResponse(CategoryEntity category) {
-        return CategoryAdminDetailResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .url(category.getUrl())
-                .createdAt(category.getCreatedAt())
-                .updatedAt(category.getUpdatedAt())
-                .brands(
-                        category.getBrands()
-                                .stream()
-                                .map(BrandMapper::mapToBrandResponse)
-                                .collect(Collectors.toSet())
-                )
-                .products(
-                        category.getProducts()
-                                .stream()
-                                .map(ProductMapper::mapToProductResponse)
-                                .collect(Collectors.toSet())
-                )
-                .build();
-    }
-    public static CategoryEntity mapCategoryToRequest(CategoryRequest categoryRequest) {
+
+    public static CategoryEntity mapRequestToCategoryEntity(CategoryRequest categoryRequest) {
         return CategoryEntity.builder()
                 .name(categoryRequest.getName())
                 .url(categoryRequest.getUrl())
                 .build();
     }
-    public static CategoryProductsResponse mapToCategoryProductsResponse(CategoryEntity category) {
-        return CategoryProductsResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .products(
-                        category.getProducts()
-                                .stream()
-                                .map(ProductMapper::mapToProductResponse)
-                                .collect(Collectors.toSet())
-                )
-                .build();
-    }
-    public static CategoryBrandsResponse mapToCategoryBrandsResponse(CategoryEntity category) {
-        return CategoryBrandsResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .brands(
-                        category.getBrands()
-                                .stream()
-                                .map(BrandMapper::mapToBrandResponse)
-                                .collect(Collectors.toSet())
-                )
-                .build();
-    }
+
 }
 

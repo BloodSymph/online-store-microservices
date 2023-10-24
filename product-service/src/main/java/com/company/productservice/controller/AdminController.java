@@ -1,8 +1,6 @@
 package com.company.productservice.controller;
 
-import com.company.productservice.dto.brand.BrandAdminDetailResponse;
 import com.company.productservice.dto.brand.BrandAdminResponse;
-import com.company.productservice.dto.category.CategoryAdminDetailResponse;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.service.AdminService;

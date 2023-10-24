@@ -1,8 +1,7 @@
 package com.company.productservice.service.implementation;
 
-import com.company.productservice.dto.brand.BrandAdminDetailResponse;
 import com.company.productservice.dto.brand.BrandAdminResponse;
-import com.company.productservice.dto.category.CategoryAdminDetailResponse;
+import com.company.productservice.dto.brand.BrandRequest;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.entity.BrandEntity;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.company.productservice.mapper.BrandMapper.mapToBrandAdminDetailResponse;
 import static com.company.productservice.mapper.CategoryMapper.*;
 import static com.company.productservice.utils.SlugGenerator.toSlug;
 
@@ -46,18 +44,6 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public CategoryAdminDetailResponse getCategoryDetails(String categoryUrl) {
-        CategoryEntity category = categoryRepository
-                .findByUrlIgnoreCase(categoryUrl)
-                .orElseThrow(
-                        () -> new CategoryNotFoundException(
-                                "Can not find category by url: " + categoryUrl
-                        )
-                );
-        return mapToCategoryAdminDetailResponse(category);
-    }
-
-    @Override
     public List<CategoryAdminResponse> searchCategories(String name) {
         List<CategoryEntity> categories = categoryRepository.searchByNameIgnoreCase(name);
         return categories.stream()
@@ -67,7 +53,7 @@ public class AdminServiceImplementation implements AdminService {
 
     @Override
     public CategoryAdminResponse createCategory(CategoryRequest categoryRequest) {
-        CategoryEntity category = mapCategoryToRequest(categoryRequest);
+        CategoryEntity category = mapRequestToCategoryEntity(categoryRequest);
         category.setName(categoryRequest.getName());
         category.setUrl(toSlug(categoryRequest.getName()));
         CategoryEntity createCategory = categoryRepository.save(category);
@@ -110,26 +96,22 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public BrandAdminDetailResponse getBrandDetails(String brandUrl) {
-        BrandEntity brand = brandRepository
-                .findByUrlIgnoreCase(brandUrl)
-                .orElseThrow(
-                        () -> new BrandNotFoundException(
-                                "Can not find brand by url: " + brandUrl
-                        )
-                );
-        return mapToBrandAdminDetailResponse(brand);
-    }
-
-    @Override
     public List<BrandAdminResponse> searchBrands(String name) {
         List<BrandEntity> brands = brandRepository.searchByNameIgnoreCase(name);
         return brands.stream()
                 .map(BrandMapper::mapToBrandAdminResponse)
                 .collect(Collectors.toList());
     }
-    // TODO: 21.10.2023 Create Brand
-    // TODO: 21.10.2023 Update Brand
+
+    @Override
+    public BrandAdminResponse createBrand(BrandRequest brandRequest, String categoryUrl) {
+        return null;
+    }
+
+    @Override
+    public BrandAdminResponse updateBrand(BrandRequest brandRequest, String brandUrl) {
+        return null;
+    }
 
     @Override
     public void deleteBrand(String brandUrl) {
