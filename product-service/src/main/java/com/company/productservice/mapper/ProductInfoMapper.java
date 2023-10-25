@@ -1,5 +1,6 @@
 package com.company.productservice.mapper;
 
+import com.company.productservice.dto.product_info.ProductInfoRequest;
 import com.company.productservice.dto.product_info.ProductInfoResponse;
 import com.company.productservice.entity.ProductInfoEntity;
 import org.springframework.stereotype.Component;
@@ -26,4 +27,25 @@ public class ProductInfoMapper {
                 .memory(productInfo.getMemory())
                 .build();
     }
+
+    public static ProductInfoEntity mapRequestToProductInfoEntity(ProductInfoRequest productInfoRequest) {
+        return ProductInfoEntity.builder()
+                .title(productInfoRequest.getTitle())
+                .series(productInfoRequest.getSeries())
+                .height(productInfoRequest.getHeight())
+                .width(productInfoRequest.getWidth())
+                .weight(productInfoRequest.getWeight())
+                .os(productInfoRequest.getOs())
+                .display(productInfoRequest.getDisplay())
+                .resolution(productInfoRequest.getResolution())
+                .cpu(productInfoRequest.getCpu())
+                .graphicCard(productInfoRequest.getGraphicCard())
+                .gpu(productInfoRequest.getGpu())
+                .ramType(productInfoRequest.getRamType())
+                .ram(productInfoRequest.getRam())
+                .memoryType(productInfoRequest.getMemoryType())
+                .memory(productInfoRequest.getMemory())
+                .build();
+    }
+
 }

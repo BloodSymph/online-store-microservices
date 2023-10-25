@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
+
     public static CategoryResponse mapToCategoryResponse(CategoryEntity category) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .build();
     }
+
     public static CategoryAdminResponse mapToCategoryAdminResponse(CategoryEntity category) {
         return CategoryAdminResponse.builder()
                 .id(category.getId())

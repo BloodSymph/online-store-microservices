@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BrandMapper {
+
     public static BrandResponse mapToBrandResponse(BrandEntity brand) {
         return BrandResponse.builder()
                 .id(brand.getId())

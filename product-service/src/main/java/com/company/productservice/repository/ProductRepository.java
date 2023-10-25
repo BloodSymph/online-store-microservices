@@ -13,9 +13,25 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-    List<ProductEntity> findByCategoryUrl(String categoryUrl);
-    List<ProductEntity> findByBrandUrl(String brandUrl);
+
+    @Query(
+        "SELECT products FROM ProductEntity products " +
+        "WHERE products.category.url LIKE LOWER(:categoryUrl)"
+    )
+    List<ProductEntity> findByCategoryUrl(
+           @Param("categoryUrl") String categoryUrl
+    );
+
+    @Query(
+        "SELECT products FROM ProductEntity products " +
+        "WHERE products.brand.url LIKE LOWER(:brandUrl)"
+    )
+    List<ProductEntity> findByBrandUrl(
+           @Param("brandUrl") String brandUrl
+    );
+
     Optional<ProductEntity> findByUrlIgnoreCase(String productUrl);
+
     @Query(
         "SELECT products FROM ProductEntity products " +
         "WHERE products.name LIKE LOWER(:productName) " +
@@ -27,8 +43,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             @Param("categoryName") String categoryName,
             @Param("brandName") String brandName
     );
-    List<ProductEntity> searchByNameIgnoreCase(String productName);
+
     @Transactional
     Optional<ProductEntity> deleteByUrlIgnoreCase(String productUrl);
-    boolean existsByUrlIgnoreCase(String productUrl);
+
+    Boolean existsByUrlIgnoreCase(String productUrl);
+
 }

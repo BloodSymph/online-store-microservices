@@ -7,6 +7,10 @@ import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +27,15 @@ public class AdminController {
 
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryAdminResponse> getCategoryList(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize
+    public Page<CategoryAdminResponse> getCategoryList(
+           @PageableDefault(
+                   sort = "id",
+                   direction = Sort.Direction.ASC,
+                   page = 0,
+                   size = 10
+           ) Pageable pageable
     ) {
-        return adminService.getAllCategories(pageNumber, pageSize);
+        return adminService.getAllCategories(pageable);
     }
 
     @GetMapping("/categories/search")

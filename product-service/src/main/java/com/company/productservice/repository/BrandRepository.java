@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Repository
 public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
+
     @Query(
         "SELECT brands FROM BrandEntity brands " +
         "JOIN CategoryEntity categories WHERE categories.url " +
@@ -22,9 +23,14 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     Set<BrandEntity> findBrandEntitiesByCategories_UrlIgnoreCase(
             @Param("categoryUrl") String categoryUrl
     );
+
     List<BrandEntity> searchByNameIgnoreCase(String name);
+
     Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
+
     @Transactional
     Optional<BrandEntity> deleteByUrlIgnoreCase(String brandUrl);
-    boolean existsByUrlIgnoreCase(String brandUrl);
+
+    Boolean existsByUrlIgnoreCase(String brandUrl);
+
 }

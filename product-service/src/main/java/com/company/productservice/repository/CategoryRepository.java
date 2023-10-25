@@ -2,6 +2,8 @@ package com.company.productservice.repository;
 
 import com.company.productservice.entity.CategoryEntity;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,17 +15,24 @@ import java.util.Set;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+
     @Query(
-        "SELECT categories FROM CategoryEntity categories " +
-        "JOIN BrandEntity brands WHERE brands.url " +
-        "LIKE LOWER(:brandUrl)"
+            "SELECT categories " +
+            "FROM CategoryEntity categories " +
+            "INNER JOIN categories.brands brands " +
+            "ON brands.url LIKE (:brandUrl)"
     )
     Set<CategoryEntity> findCategoryEntitiesByBrands_UrlIgnoreCase(
-            @Param("categoryUrl") String brandUrl
+            @Param("brandUrl") String brandUrl
     );
+
     Optional<CategoryEntity> findByUrlIgnoreCase(String categoryUrl);
+
     List<CategoryEntity> searchByNameIgnoreCase(String name);
+
     @Transactional
     Optional<CategoryEntity> deleteByUrlIgnoreCase(String categoryUrl);
-    boolean existsByUrlIgnoreCase(String categoryUrl);
+
+    Boolean existsByUrlIgnoreCase(String categoryUrl);
+
 }

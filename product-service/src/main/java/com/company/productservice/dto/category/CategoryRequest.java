@@ -1,8 +1,6 @@
 package com.company.productservice.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +18,6 @@ public class CategoryRequest {
     private String name;
 
     @Length(min = 3, max = 20)
-    @NotNull
-    @NotBlank(message = "Category slug should not be empty!")
     private String url;
 
 }
