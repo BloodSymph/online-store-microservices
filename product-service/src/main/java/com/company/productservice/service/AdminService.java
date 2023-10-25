@@ -22,11 +22,11 @@ public interface AdminService {
 
     Page<CategoryAdminResponse> getAllCategories(Pageable pageable);
 
-    List<CategoryAdminResponse> searchCategories(String name);
+    Page<CategoryAdminResponse> searchCategories(String name, Pageable pageable);
 
     CategoryAdminResponse getSingleCategory(String categoryUrl);
 
-    Set<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl);
+    Page<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl, Pageable pageable);
 
     CategoryAdminResponse createCategory(CategoryRequest categoryRequest);
 
@@ -36,13 +36,13 @@ public interface AdminService {
 
     void deleteCategory(String categoryUrl);
 
-    List<BrandAdminResponse> getAllBrands(int pageNumber, int pageSize);
+    Page<BrandAdminResponse> getAllBrands(Pageable pageable);
 
     BrandAdminResponse getSingleBrand(String brandUrl);
 
-    Set<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl);
+    Page<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl, Pageable pageable);
 
-    List<BrandAdminResponse> searchBrands(String name);
+    Page<BrandAdminResponse> searchBrands(String name, Pageable pageable);
 
     BrandAdminResponse createBrand(
             BrandRequest brandRequest, String categoryUrl

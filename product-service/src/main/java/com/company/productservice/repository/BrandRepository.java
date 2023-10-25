@@ -2,6 +2,8 @@ package com.company.productservice.repository;
 
 import com.company.productservice.entity.BrandEntity;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,14 +19,15 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
 
     @Query(
         "SELECT brands FROM BrandEntity brands " +
-        "JOIN CategoryEntity categories WHERE categories.url " +
+        "INNER JOIN brands.categories categories ON categories.url " +
         "LIKE LOWER(:categoryUrl)"
     )
-    Set<BrandEntity> findBrandEntitiesByCategories_UrlIgnoreCase(
-            @Param("categoryUrl") String categoryUrl
+    Page<BrandEntity> findBrandEntitiesByCategories_UrlIgnoreCase(
+            @Param("categoryUrl") String categoryUrl,
+            Pageable pageable
     );
 
-    List<BrandEntity> searchByNameIgnoreCase(String name);
+    Page<BrandEntity> searchByNameIgnoreCase(String name, Pageable pageable);
 
     Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
 

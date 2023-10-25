@@ -62,11 +62,10 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public List<CategoryAdminResponse> searchCategories(String name) {
-        List<CategoryEntity> categoryEntityList = categoryRepository.searchByNameIgnoreCase(name);
-        return categoryEntityList.stream()
-                .map(CategoryMapper::mapToCategoryAdminResponse)
-                .collect(Collectors.toList());
+    public Page<CategoryAdminResponse> searchCategories(String name, Pageable pageable) {
+       return categoryRepository
+               .searchByNameIgnoreCase(name, pageable)
+               .map(CategoryMapper::mapToCategoryAdminResponse);
     }
 
     @Override
@@ -80,11 +79,10 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Set<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl) {
-        Set<CategoryEntity> categoryEntitySet = categoryRepository.findCategoryEntitiesByBrands_UrlIgnoreCase(brandUrl);
-        return categoryEntitySet.stream()
-                .map(CategoryMapper::mapToCategoryAdminResponse)
-                .collect(Collectors.toSet());
+    public Page<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl, Pageable pageable) {
+        return categoryRepository
+                .findCategoryEntitiesByBrands_UrlIgnoreCase(brandUrl, pageable)
+                .map(CategoryMapper::mapToCategoryAdminResponse);
     }
 
     @Override
@@ -134,21 +132,17 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public List<BrandAdminResponse> getAllBrands(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<BrandEntity> brandEntityPage = brandRepository.findAll(pageable);
-        List<BrandEntity> brands = brandEntityPage.getContent();
-        return brands.stream()
-                .map(BrandMapper::mapToBrandAdminResponse)
-                .collect(Collectors.toList());
+    public Page<BrandAdminResponse> getAllBrands(Pageable pageable) {
+        return brandRepository
+                .findAll(pageable)
+                .map(BrandMapper::mapToBrandAdminResponse);
     }
 
     @Override
-    public List<BrandAdminResponse> searchBrands(String name) {
-        List<BrandEntity> brands = brandRepository.searchByNameIgnoreCase(name);
-        return brands.stream()
-                .map(BrandMapper::mapToBrandAdminResponse)
-                .collect(Collectors.toList());
+    public Page<BrandAdminResponse> searchBrands(String name, Pageable pageable) {
+        return brandRepository
+                .searchByNameIgnoreCase(name, pageable)
+                .map(BrandMapper::mapToBrandAdminResponse);
     }
 
     @Override
@@ -162,11 +156,10 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Set<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl) {
-        Set<BrandEntity> brands = brandRepository.findBrandEntitiesByCategories_UrlIgnoreCase(categoryUrl);
-        return brands.stream()
-                .map(BrandMapper::mapToBrandAdminResponse)
-                .collect(Collectors.toSet());
+    public Page<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl, Pageable pageable) {
+        return brandRepository
+                .findBrandEntitiesByCategories_UrlIgnoreCase(categoryUrl, pageable)
+                .map(BrandMapper::mapToBrandAdminResponse);
     }
 
     @Override

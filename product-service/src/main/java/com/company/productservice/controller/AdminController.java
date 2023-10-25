@@ -40,10 +40,16 @@ public class AdminController {
 
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryAdminResponse> searchCategoriesByName(
-            @RequestParam(value = "name") String name
+    public Page<CategoryAdminResponse> searchCategoriesByName(
+            @RequestParam(value = "name") String name,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
     ) {
-        return adminService.searchCategories(name);
+        return adminService.searchCategories(name, pageable);
     }
 
     @GetMapping("/categories/{categoryUrl}/details")
@@ -56,10 +62,16 @@ public class AdminController {
 
     @GetMapping("/categories/{categoryUrl}/brands")
     @ResponseStatus(HttpStatus.OK)
-    public Set<BrandAdminResponse> getBrandsByCategory(
-            @PathVariable(value = "categoryUrl") String categoryUrl
+    public Page<BrandAdminResponse> getBrandsByCategory(
+            @PathVariable(value = "categoryUrl") String categoryUrl,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
     ) {
-        return adminService.getSetOfBrandsByCategory(categoryUrl);
+        return adminService.getSetOfBrandsByCategory(categoryUrl, pageable);
     }
 
     @PostMapping("/categories/create")
@@ -90,11 +102,15 @@ public class AdminController {
 
     @GetMapping("/brands")
     @ResponseStatus(HttpStatus.OK)
-    public List<BrandAdminResponse> getBrandList(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize
+    public Page<BrandAdminResponse> getBrandList(
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
     ) {
-        return adminService.getAllBrands(pageNumber, pageSize);
+        return adminService.getAllBrands(pageable);
     }
 
     @GetMapping("/brands/{brandUrl}/details")
@@ -107,18 +123,30 @@ public class AdminController {
 
     @GetMapping("/brands/{brandUrl}/categories")
     @ResponseStatus(HttpStatus.OK)
-    public Set<CategoryAdminResponse> getCategoriesByBrand(
-            @PathVariable("brandUrl") String brandUrl
+    public Page<CategoryAdminResponse> getCategoriesByBrand(
+            @PathVariable("brandUrl") String brandUrl,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
     ) {
-        return adminService.getSetOfCategoriesByBrand(brandUrl);
+        return adminService.getSetOfCategoriesByBrand(brandUrl, pageable);
     }
 
     @GetMapping("/brands/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<BrandAdminResponse> searchBrands(
-            @RequestParam(value = "name") String name
+    public Page<BrandAdminResponse> searchBrands(
+            @RequestParam(value = "name") String name,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
     ) {
-        return adminService.searchBrands(name);
+        return adminService.searchBrands(name, pageable);
     }
 
     @PostMapping("/categories/{categoryUrl}/brands/create")

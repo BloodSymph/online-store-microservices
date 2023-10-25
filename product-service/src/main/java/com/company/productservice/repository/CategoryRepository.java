@@ -20,15 +20,18 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
             "SELECT categories " +
             "FROM CategoryEntity categories " +
             "INNER JOIN categories.brands brands " +
-            "ON brands.url LIKE (:brandUrl)"
+            "ON brands.url LIKE LOWER(:brandUrl) "
     )
-    Set<CategoryEntity> findCategoryEntitiesByBrands_UrlIgnoreCase(
-            @Param("brandUrl") String brandUrl
+    Page<CategoryEntity> findCategoryEntitiesByBrands_UrlIgnoreCase(
+            @Param("brandUrl") String brandUrl,
+            Pageable pageable
     );
 
     Optional<CategoryEntity> findByUrlIgnoreCase(String categoryUrl);
 
-    List<CategoryEntity> searchByNameIgnoreCase(String name);
+    Page<CategoryEntity> searchByNameIgnoreCase(
+            String name, Pageable pageable
+    );
 
     @Transactional
     Optional<CategoryEntity> deleteByUrlIgnoreCase(String categoryUrl);
