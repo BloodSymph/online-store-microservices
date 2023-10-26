@@ -18,7 +18,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductEntity mapRequestToProductEntity(ProductRequest productRequest) {
+    public static ProductEntity mapRequestToProductEntity(ProductRequest productRequest) {
         return ProductEntity.builder()
                 .name(productRequest.getName())
                 .url(productRequest.getUrl())

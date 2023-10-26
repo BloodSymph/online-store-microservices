@@ -54,20 +54,29 @@ public interface AdminService {
 
     void deleteBrand(String brandUrl);
 
-    List<ProductAdminResponse> getAllProducts(int pageNumber, int pageSize, String sort);
+    Page<ProductAdminResponse> getAllProducts(Pageable pageable);
 
     ProductAdminResponse getSingleProduct(String productUrl);
 
-    List<ProductAdminResponse> searchProducts(
-            String productName, String categoryName, String brandName
+    Page<ProductAdminResponse> searchProducts(
+            String productName,
+            String categoryName,
+            String brandName,
+            Pageable pageable
     );
 
-    List<ProductAdminResponse> getProductsByCategory(String categoryUrl);
+    Page<ProductAdminResponse> getProductsByCategory(
+            String categoryUrl, Pageable pageable
+    );
 
-    List<ProductAdminResponse> getProductsByBrand(String brandUrl);
+    Page<ProductAdminResponse> getProductsByBrand(
+            String brandUrl, Pageable pageable
+    );
 
     ProductAdminResponse createProduct(
-            ProductRequest productRequest, String categoryUrl, String brandUrl
+            ProductRequest productRequest,
+            String categoryUrl,
+            String brandUrl
     );
 
     ProductAdminResponse updateProduct(

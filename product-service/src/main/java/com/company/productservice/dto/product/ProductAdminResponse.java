@@ -25,8 +25,6 @@ public class ProductAdminResponse {
     private String name;
 
     @Length(min = 3, max = 20)
-    @NotNull
-    @NotBlank(message = "Product slug should not be empty!")
     private String url;
 
     @NotNull

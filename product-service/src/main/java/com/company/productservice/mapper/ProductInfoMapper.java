@@ -11,6 +11,7 @@ public class ProductInfoMapper {
         return ProductInfoResponse.builder()
                 .id(productInfo.getId())
                 .title(productInfo.getTitle())
+                .description(productInfo.getDescription())
                 .series(productInfo.getSeries())
                 .height(productInfo.getHeight())
                 .width(productInfo.getWidth())
@@ -31,6 +32,7 @@ public class ProductInfoMapper {
     public static ProductInfoEntity mapRequestToProductInfoEntity(ProductInfoRequest productInfoRequest) {
         return ProductInfoEntity.builder()
                 .title(productInfoRequest.getTitle())
+                .description(productInfoRequest.getDescription())
                 .series(productInfoRequest.getSeries())
                 .height(productInfoRequest.getHeight())
                 .width(productInfoRequest.getWidth())

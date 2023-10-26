@@ -4,6 +4,8 @@ import com.company.productservice.dto.brand.BrandAdminResponse;
 import com.company.productservice.dto.brand.BrandRequest;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
+import com.company.productservice.dto.product.ProductAdminResponse;
+import com.company.productservice.dto.product.ProductRequest;
 import com.company.productservice.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class AdminController {
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
     public Page<CategoryAdminResponse> searchCategoriesByName(
-            @RequestParam(value = "name") String name,
+            @RequestParam(value = "name", required = false) String name,
             @PageableDefault(
                     sort = "id",
                     direction = Sort.Direction.ASC,
@@ -138,7 +137,7 @@ public class AdminController {
     @GetMapping("/brands/search")
     @ResponseStatus(HttpStatus.OK)
     public Page<BrandAdminResponse> searchBrands(
-            @RequestParam(value = "name") String name,
+            @RequestParam(value = "name", required = false) String name,
             @PageableDefault(
                     sort = "id",
                     direction = Sort.Direction.ASC,
@@ -175,4 +174,106 @@ public class AdminController {
         adminService.deleteBrand(brandUrl);
         return new ResponseEntity<>("Brand successful deleted!", HttpStatus.OK);
     }
+
+    @GetMapping("/products")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductAdminResponse> getProductsList(
+           @PageableDefault(
+                   sort = "id",
+                   direction = Sort.Direction.ASC,
+                   page = 0,
+                   size = 10
+           ) Pageable pageable
+    ) {
+        return adminService.getAllProducts(pageable);
+    }
+
+    @GetMapping("/products/{productUrl}/details")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductAdminResponse getProductsDetails(
+            @PathVariable("productUrl") String productUrl
+    ) {
+        return adminService.getSingleProduct(productUrl);
+    }
+
+    @GetMapping("/products/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductAdminResponse> searchProducts(
+            @RequestParam(value = "productName", required = false) String productName,
+            @RequestParam(value = "categoryName", required = false) String categoryName,
+            @RequestParam(value = "brandName", required = false) String brandName,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
+    ) {
+        return adminService.searchProducts(
+                productName, categoryName, brandName, pageable
+        );
+    }
+
+    @GetMapping("/categories/{categoryUrl}/products")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductAdminResponse> getProductsByCategory(
+            @PathVariable(value = "categoryUrl") String categoryUrl,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
+    ) {
+        return adminService.getProductsByCategory(categoryUrl, pageable);
+    }
+
+    @GetMapping("/brands/{brandUrl}/products")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductAdminResponse> getProductsByBrand(
+            @PathVariable(value = "brandUrl") String brandUrl,
+            @PageableDefault(
+                    sort = "id",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable
+    ) {
+        return adminService.getProductsByBrand(brandUrl, pageable);
+    }
+
+    @PostMapping(
+            "/categories/{categoryUrl}/brands/{brandUrl}/products/create"
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductAdminResponse createProduct(
+            @Valid @RequestBody ProductRequest productRequest,
+            @PathVariable(value = "categoryUrl") String categoryUrl,
+            @PathVariable(value = "brandUrl") String brandUrl
+    ) {
+        return adminService.createProduct(
+                productRequest, categoryUrl, brandUrl
+        );
+    }
+
+    @PutMapping("/products/{productUrl}/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductAdminResponse updateProduct(
+            @Valid @RequestBody ProductRequest productRequest,
+            @PathVariable(value = "productUrl") String productUrl
+    ) {
+        return adminService.updateProduct(productRequest, productUrl);
+    }
+
+    @DeleteMapping("/products/{productUrl}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteProduct(
+            @PathVariable(value = "productUrl") String productUrl
+    ) {
+        adminService.deleteProduct(productUrl);
+        return new ResponseEntity<>("Product successful deleted!", HttpStatus.OK);
+    }
+
+
+
 }

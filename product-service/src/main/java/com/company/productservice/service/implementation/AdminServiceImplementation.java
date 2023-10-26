@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 import static com.company.productservice.mapper.BrandMapper.mapRequestToBrandEntity;
 import static com.company.productservice.mapper.BrandMapper.mapToBrandAdminResponse;
 import static com.company.productservice.mapper.CategoryMapper.*;
+import static com.company.productservice.mapper.ProductInfoMapper.mapRequestToProductInfoEntity;
+import static com.company.productservice.mapper.ProductInfoMapper.mapToProductInfoResponse;
+import static com.company.productservice.mapper.ProductMapper.mapRequestToProductEntity;
 import static com.company.productservice.mapper.ProductMapper.mapToProductAdminResponse;
 import static com.company.productservice.utils.SlugGenerator.toSlug;
 
@@ -73,7 +76,9 @@ public class AdminServiceImplementation implements AdminService {
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
-                        () -> new CategoryNotFoundException("Can not get category by current url: " + categoryUrl)
+                        () -> new CategoryNotFoundException(
+                                "Can not get category by current url: " + categoryUrl
+                        )
                 );
         return mapToCategoryAdminResponse(category);
     }
@@ -90,7 +95,6 @@ public class AdminServiceImplementation implements AdminService {
 
         CategoryEntity category = mapRequestToCategoryEntity(categoryRequest);
 
-        category.setName(categoryRequest.getName());
         category.setUrl(toSlug(categoryRequest.getName()));
 
         CategoryEntity createCategory = categoryRepository.save(category);
@@ -150,7 +154,9 @@ public class AdminServiceImplementation implements AdminService {
         BrandEntity brand = brandRepository
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
-                        () -> new BrandNotFoundException("Can not get brand by current url: " + brandUrl)
+                        () -> new BrandNotFoundException(
+                                "Can not get brand by current url: " + brandUrl
+                        )
                 );
         return mapToBrandAdminResponse(brand);
     }
@@ -179,7 +185,7 @@ public class AdminServiceImplementation implements AdminService {
         categoryEntitySet.add(category);
 
         BrandEntity brand = mapRequestToBrandEntity(brandRequest);
-        brand.setName(brandRequest.getName());
+
         brand.setUrl(toSlug(brandRequest.getName()));
         brand.setCategories(categoryEntitySet);
 
@@ -197,7 +203,9 @@ public class AdminServiceImplementation implements AdminService {
         BrandEntity brand = brandRepository
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
-                        () -> new BrandNotFoundException("Can not update brand by current url: " + brandUrl)
+                        () -> new BrandNotFoundException(
+                                "Can not update brand by current url: " + brandUrl
+                        )
                 );
 
         brand.setName(brandRequest.getName());
@@ -220,17 +228,10 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public List<ProductAdminResponse> getAllProducts(
-            int pageNumber, int pageSize, String sort
-    ) {
-        Pageable pageable = PageRequest.of(
-                pageNumber, pageSize, Sort.by(sort).descending()
-        );
-        Page<ProductEntity> productEntityPage = productRepository.findAll(pageable);
-        List<ProductEntity> products = productEntityPage.getContent();
-        return products.stream()
-                .map(ProductMapper::mapToProductAdminResponse)
-                .collect(Collectors.toList());
+    public Page<ProductAdminResponse> getAllProducts(Pageable pageable) {
+        return productRepository
+                .findAll(pageable)
+                .map(ProductMapper::mapToProductAdminResponse);
     }
 
     @Override
@@ -238,50 +239,105 @@ public class AdminServiceImplementation implements AdminService {
         ProductEntity product = productRepository
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
-                        () -> new ProductNotFoundException("Can not get product by current url: " + productUrl)
+                        () -> new ProductNotFoundException(
+                                "Can not get product by current url: " + productUrl
+                        )
                 );
         return mapToProductAdminResponse(product);
     }
 
     @Override
-    public List<ProductAdminResponse> searchProducts(
-            String productName, String categoryName, String brandName
+    public Page<ProductAdminResponse> searchProducts(
+            String productName,
+            String categoryName,
+            String brandName,
+            Pageable pageable
+    ) {
+        return productRepository.searchProduct(
+                productName,
+                categoryName,
+                brandName,
+                pageable
+        ).map(ProductMapper::mapToProductAdminResponse);
+    }
+
+    @Override
+    public Page<ProductAdminResponse> getProductsByCategory(
+            String categoryUrl, Pageable pageable
+    ) {
+       return productRepository
+               .findByCategoryUrl(categoryUrl, pageable)
+               .map(ProductMapper::mapToProductAdminResponse);
+    }
+
+    @Override
+    public Page<ProductAdminResponse> getProductsByBrand(
+            String brandUrl, Pageable pageable
+    ) {
+        return productRepository
+                .findByBrandUrl(brandUrl, pageable)
+                .map(ProductMapper::mapToProductAdminResponse);
+    }
+
+    @Override
+    public ProductAdminResponse createProduct(
+            ProductRequest productRequest,
+            String categoryUrl,
+            String brandUrl
     ) {
 
-        List<ProductEntity> products = productRepository.searchProduct(
-                productName, categoryName, brandName
-        );
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(categoryUrl)
+                .orElseThrow(
+                        ()-> new CategoryNotFoundException(
+                                "Can not get category with current url: " + categoryUrl
+                        )
+                );
 
-        return products.stream()
-                .map(ProductMapper::mapToProductAdminResponse)
-                .collect(Collectors.toList());
+
+        BrandEntity brand = brandRepository
+                .findByUrlIgnoreCase(brandUrl)
+                .orElseThrow(
+                        () -> new BrandNotFoundException(
+                                "Can not update brand by current url: " + brandUrl
+                        )
+                );
+
+        ProductEntity product = mapRequestToProductEntity(productRequest);
+
+        product.setUrl(toSlug(productRequest.getName()));
+        product.setCategory(category);
+        product.setBrand(brand);
+
+        ProductEntity newProduct = productRepository.save(product);
+
+        return mapToProductAdminResponse(newProduct);
+
     }
 
     @Override
-    public List<ProductAdminResponse> getProductsByCategory(String categoryUrl) {
-        List<ProductEntity> products = productRepository.findByCategoryUrl(categoryUrl);
-        return products.stream()
-                .map(ProductMapper::mapToProductAdminResponse)
-                .collect(Collectors.toList());
-    }
+    public ProductAdminResponse updateProduct(
+            ProductRequest productRequest,
+            String productUrl
+    ) {
 
-    @Override
-    public List<ProductAdminResponse> getProductsByBrand(String brandUrl) {
-        List<ProductEntity> products = productRepository.findByBrandUrl(brandUrl);
-        return products.stream()
-                .map(ProductMapper::mapToProductAdminResponse)
-                .collect(Collectors.toList());
-    }
+        ProductEntity product = productRepository
+                .findByUrlIgnoreCase(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not update product by current url: " + productUrl
+                        )
+                );
 
-    @Override
-    public ProductAdminResponse createProduct(ProductRequest productRequest, String categoryUrl, String brandUrl) {
+        product.setName(productRequest.getName());
+        product.setUrl(toSlug(productRequest.getName()));
+        product.setPrice(productRequest.getPrice());
+        product.setPhotoUrl(productRequest.getPhotoUrl());
 
-        return null;
-    }
+        ProductEntity updatedProduct = productRepository.save(product);
 
-    @Override
-    public ProductAdminResponse updateProduct(ProductRequest productRequest, String productUrl) {
-        return null;
+        return mapToProductAdminResponse(updatedProduct);
+
     }
 
     @Override
@@ -296,22 +352,82 @@ public class AdminServiceImplementation implements AdminService {
 
     @Override
     public ProductInfoResponse getProductInfo(String productUrl) {
-        return null;
+        ProductInfoEntity productInfo = productInfoRepository
+                .findByProductUrlIgnoreCase(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not get product info by current product url: " + productUrl
+                        )
+                );
+        return mapToProductInfoResponse(productInfo);
     }
 
     @Override
-    public ProductInfoResponse createProductDescription(ProductInfoRequest productInfoRequest, String productUrl) {
-        return null;
+    public ProductInfoResponse createProductDescription(
+            ProductInfoRequest productInfoRequest, String productUrl
+    ) {
+
+        ProductEntity product = productRepository
+                .findByUrlIgnoreCase(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not get product by current url: " + productUrl
+                        )
+                );
+
+        ProductInfoEntity productInfo = mapRequestToProductInfoEntity(productInfoRequest);
+
+        productInfo.setProduct(product);
+
+        ProductInfoEntity newProductInfo = productInfoRepository.save(productInfo);
+
+        return mapToProductInfoResponse(newProductInfo);
     }
 
     @Override
-    public ProductInfoResponse updateProductDescription(ProductInfoRequest productInfoRequest, String productUrl) {
-        return null;
+    public ProductInfoResponse updateProductDescription(
+            ProductInfoRequest productInfoRequest, String productUrl
+    ) {
+
+        ProductInfoEntity productInfo = productInfoRepository
+                .findByProductUrlIgnoreCase(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not get product info by current product url: " + productUrl
+                        )
+                );
+
+       productInfo.setTitle(productInfoRequest.getTitle());
+       productInfo.setDescription(productInfoRequest.getDescription());
+       productInfo.setSeries(productInfoRequest.getSeries());
+       productInfo.setHeight(productInfoRequest.getHeight());
+       productInfo.setWidth(productInfoRequest.getWidth());
+       productInfo.setWeight(productInfoRequest.getWeight());
+       productInfo.setOs(productInfoRequest.getOs());
+       productInfo.setDisplay(productInfoRequest.getDisplay());
+       productInfo.setResolution(productInfoRequest.getResolution());
+       productInfo.setCpu(productInfoRequest.getCpu());
+       productInfo.setGraphicCard(productInfoRequest.getGraphicCard());
+       productInfo.setGpu(productInfoRequest.getGpu());
+       productInfo.setRamType(productInfoRequest.getRamType());
+       productInfo.setRam(productInfoRequest.getRam());
+       productInfo.setMemoryType(productInfoRequest.getMemoryType());
+       productInfo.setMemory(productInfoRequest.getMemory());
+
+       ProductInfoEntity updatedProductInfo = productInfoRepository.save(productInfo);
+
+       return mapToProductInfoResponse(updatedProductInfo);
+
     }
 
     @Override
     public void deleteProductDescription(String productUrl) {
-
+        if (!productInfoRepository.existsByProductUrl(productUrl)) {
+            throw new ProductNotFoundException(
+                    "Can not delete product info by current product url: " + productUrl
+            );
+        }
+        productInfoRepository.deleteByProductUrl(productUrl);
     }
 
 }

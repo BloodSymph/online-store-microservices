@@ -24,6 +24,9 @@ public class ProductInfoEntity {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "short_description")
+    private String description;
+
     @Column(name = "series")
     private String series;
 

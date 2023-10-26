@@ -24,8 +24,6 @@ public class BrandAdminResponse {
     private String name;
 
     @Length(min = 3, max = 20)
-    @NotNull
-    @NotBlank(message = "Brand slug should not be empty!")
     private String url;
 
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
