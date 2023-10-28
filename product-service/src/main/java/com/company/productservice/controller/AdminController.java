@@ -6,6 +6,8 @@ import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.dto.product.ProductAdminResponse;
 import com.company.productservice.dto.product.ProductRequest;
+import com.company.productservice.dto.product_info.ProductInfoRequest;
+import com.company.productservice.dto.product_info.ProductInfoResponse;
 import com.company.productservice.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.searchCategories(name, pageable);
+        return adminService.searchCategories(
+                name, pageable
+        );
     }
 
     @GetMapping("/categories/{categoryUrl}/details")
@@ -70,7 +74,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.getSetOfBrandsByCategory(categoryUrl, pageable);
+        return adminService.getSetOfBrandsByCategory(
+                categoryUrl, pageable
+        );
     }
 
     @PostMapping("/categories/create")
@@ -87,7 +93,9 @@ public class AdminController {
             @PathVariable(value = "categoryUrl") String categoryUrl,
             @Valid @RequestBody CategoryRequest categoryRequest
     ) {
-        return adminService.updateCategory(categoryRequest, categoryUrl);
+        return adminService.updateCategory(
+                categoryRequest, categoryUrl
+        );
     }
 
     @DeleteMapping("/categories/{categoryUrl}/delete")
@@ -96,7 +104,9 @@ public class AdminController {
             @PathVariable(value = "categoryUrl") String categoryUrl
     ) {
         adminService.deleteCategory(categoryUrl);
-        return new ResponseEntity<>("Category successful deleted!", HttpStatus.OK);
+        return new ResponseEntity<>(
+                "Category successful deleted!", HttpStatus.OK
+        );
     }
 
     @GetMapping("/brands")
@@ -131,7 +141,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.getSetOfCategoriesByBrand(brandUrl, pageable);
+        return adminService.getSetOfCategoriesByBrand(
+                brandUrl, pageable
+        );
     }
 
     @GetMapping("/brands/search")
@@ -145,7 +157,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.searchBrands(name, pageable);
+        return adminService.searchBrands(
+                name, pageable
+        );
     }
 
     @PostMapping("/categories/{categoryUrl}/brands/create")
@@ -154,7 +168,9 @@ public class AdminController {
             @RequestBody BrandRequest brandRequest,
             @PathVariable(value = "categoryUrl") String categoryUrl
     ) {
-        return adminService.createBrand(brandRequest, categoryUrl);
+        return adminService.createBrand(
+                brandRequest, categoryUrl
+        );
     }
 
     @PutMapping("/brands/{brandUrl}/update")
@@ -163,7 +179,9 @@ public class AdminController {
             @RequestBody BrandRequest brandRequest,
             @PathVariable("brandUrl") String brandUrl
     ) {
-        return adminService.updateBrand(brandRequest, brandUrl);
+        return adminService.updateBrand(
+                brandRequest, brandUrl
+        );
     }
 
     @DeleteMapping("/brands/{brandUrl}/delete")
@@ -172,7 +190,9 @@ public class AdminController {
             @PathVariable(value = "brandUrl") String brandUrl
     ) {
         adminService.deleteBrand(brandUrl);
-        return new ResponseEntity<>("Brand successful deleted!", HttpStatus.OK);
+        return new ResponseEntity<>(
+                "Brand successful deleted!", HttpStatus.OK
+        );
     }
 
     @GetMapping("/products")
@@ -225,7 +245,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.getProductsByCategory(categoryUrl, pageable);
+        return adminService.getProductsByCategory(
+                categoryUrl, pageable
+        );
     }
 
     @GetMapping("/brands/{brandUrl}/products")
@@ -239,7 +261,9 @@ public class AdminController {
                     size = 10
             ) Pageable pageable
     ) {
-        return adminService.getProductsByBrand(brandUrl, pageable);
+        return adminService.getProductsByBrand(
+                brandUrl, pageable
+        );
     }
 
     @PostMapping(
@@ -262,7 +286,9 @@ public class AdminController {
             @Valid @RequestBody ProductRequest productRequest,
             @PathVariable(value = "productUrl") String productUrl
     ) {
-        return adminService.updateProduct(productRequest, productUrl);
+        return adminService.updateProduct(
+                productRequest, productUrl
+        );
     }
 
     @DeleteMapping("/products/{productUrl}/delete")
@@ -271,9 +297,49 @@ public class AdminController {
             @PathVariable(value = "productUrl") String productUrl
     ) {
         adminService.deleteProduct(productUrl);
-        return new ResponseEntity<>("Product successful deleted!", HttpStatus.OK);
+        return new ResponseEntity<>(
+                "Product successful deleted!", HttpStatus.OK
+        );
     }
 
+    @GetMapping("/products/{productUrl}/description")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductInfoResponse getProductInfo(
+            @PathVariable("productUrl") String productUrl
+    ) {
+        return adminService.getProductInfo(productUrl);
+    }
 
+    @PostMapping("/products/{productUrl}/description/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductInfoResponse createProductInformation(
+            @Valid @RequestBody ProductInfoRequest productInfoRequest,
+            @PathVariable("productUrl") String productUrl
+    ) {
+        return adminService.createProductDescription(
+                productInfoRequest, productUrl
+        );
+    }
 
+    @PutMapping("/products/{productUrl}/description/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductInfoResponse updateProductInformation(
+            @Valid @RequestBody ProductInfoRequest productInfoRequest,
+            @PathVariable("productUrl") String productUrl
+    ) {
+        return adminService.updateProductDescription(
+                productInfoRequest, productUrl
+        );
+    }
+
+    @DeleteMapping("/products/{productUrl}/description/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteProductInformation(
+            @PathVariable("productUrl") String productUrl
+    ) {
+        adminService.deleteProductDescription(productUrl);
+        return new ResponseEntity<>(
+                "Description successful deleted!", HttpStatus.OK
+        );
+    }
 }
