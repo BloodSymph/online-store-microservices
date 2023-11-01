@@ -65,7 +65,9 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Page<CategoryAdminResponse> searchCategories(String name, Pageable pageable) {
+    public Page<CategoryAdminResponse> searchCategories(
+            String name, Pageable pageable
+    ) {
        return categoryRepository
                .searchByNameIgnoreCase(name, pageable)
                .map(CategoryMapper::mapToCategoryAdminResponse);
@@ -84,7 +86,9 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Page<CategoryAdminResponse> getSetOfCategoriesByBrand(String brandUrl, Pageable pageable) {
+    public Page<CategoryAdminResponse> getSetOfCategoriesByBrand(
+            String brandUrl, Pageable pageable
+    ) {
         return categoryRepository
                 .findCategoryEntitiesByBrands_UrlIgnoreCase(brandUrl, pageable)
                 .map(CategoryMapper::mapToCategoryAdminResponse);
@@ -143,7 +147,9 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Page<BrandAdminResponse> searchBrands(String name, Pageable pageable) {
+    public Page<BrandAdminResponse> searchBrands(
+            String name, Pageable pageable
+    ) {
         return brandRepository
                 .searchByNameIgnoreCase(name, pageable)
                 .map(BrandMapper::mapToBrandAdminResponse);
@@ -162,7 +168,9 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public Page<BrandAdminResponse> getSetOfBrandsByCategory(String categoryUrl, Pageable pageable) {
+    public Page<BrandAdminResponse> getSetOfBrandsByCategory(
+            String categoryUrl, Pageable pageable
+    ) {
         return brandRepository
                 .findBrandEntitiesByCategories_UrlIgnoreCase(categoryUrl, pageable)
                 .map(BrandMapper::mapToBrandAdminResponse);

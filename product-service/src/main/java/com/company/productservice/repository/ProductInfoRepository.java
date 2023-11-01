@@ -27,7 +27,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfoEntity, 
         "DELETE FROM ProductInfoEntity product_info " +
         "WHERE product_info.product.url LIKE LOWER(:productUrl)"
     )
-    Optional<ProductInfoEntity> deleteByProductUrl(
+    void deleteByProductUrl(
             @Param("productUrl") String productUrl
     );
 
