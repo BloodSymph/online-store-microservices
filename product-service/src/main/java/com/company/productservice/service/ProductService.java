@@ -23,9 +23,7 @@ public interface ProductService {
     );
 
     Page<ProductResponse> searchProducts(
-            String productName,
-            String categoryName,
-            String brandName,
+            String name,
             Pageable pageable
     );
 

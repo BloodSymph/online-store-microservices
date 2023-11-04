@@ -74,14 +74,9 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductResponse> searchProducts(
             @RequestParam(
-                    value = "productName", required = false
-            ) String productName,
-            @RequestParam(
-                    value = "categoryName", required = false
-            ) String categoryName,
-            @RequestParam(
-                    value = "brandName", required = false
-            ) String brandName,
+                    value = "name",
+                    required = false
+            ) String name,
             @PageableDefault(
                     sort = "price",
                     direction = Sort.Direction.DESC,
@@ -90,9 +85,7 @@ public class ProductController {
             ) Pageable pageable
     ) {
         return productService.searchProducts(
-                productName,
-                categoryName,
-                brandName,
+                name,
                 pageable
         );
     }

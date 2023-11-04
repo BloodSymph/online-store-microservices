@@ -60,16 +60,12 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public Page<ProductResponse> searchProducts(
-            String productName,
-            String categoryName,
-            String brandName,
+            String name,
             Pageable pageable
     ) {
         return productRepository
-                .searchProduct(
-                        productName,
-                        categoryName,
-                        brandName,
+                .searchByNameIgnoreCase(
+                        name,
                         pageable
                 ).map(ProductMapper::mapToProductResponse);
     }

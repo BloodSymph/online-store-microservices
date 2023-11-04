@@ -219,9 +219,10 @@ public class AdminController {
     @GetMapping("/products/search")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductAdminResponse> searchProducts(
-            @RequestParam(value = "productName", required = false) String productName,
-            @RequestParam(value = "categoryName", required = false) String categoryName,
-            @RequestParam(value = "brandName", required = false) String brandName,
+            @RequestParam(
+                    value = "name",
+                    required = false
+            ) String name,
             @PageableDefault(
                     sort = "id",
                     direction = Sort.Direction.ASC,
@@ -230,7 +231,7 @@ public class AdminController {
             ) Pageable pageable
     ) {
         return adminService.searchProducts(
-                productName, categoryName, brandName, pageable
+                name, pageable
         );
     }
 

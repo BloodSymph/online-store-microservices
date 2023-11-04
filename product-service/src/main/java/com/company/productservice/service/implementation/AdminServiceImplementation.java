@@ -256,15 +256,11 @@ public class AdminServiceImplementation implements AdminService {
 
     @Override
     public Page<ProductAdminResponse> searchProducts(
-            String productName,
-            String categoryName,
-            String brandName,
+            String name,
             Pageable pageable
     ) {
-        return productRepository.searchProduct(
-                productName,
-                categoryName,
-                brandName,
+        return productRepository.searchByNameIgnoreCase(
+                name,
                 pageable
         ).map(ProductMapper::mapToProductAdminResponse);
     }

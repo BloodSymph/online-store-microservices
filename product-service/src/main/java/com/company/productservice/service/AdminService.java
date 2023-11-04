@@ -59,9 +59,7 @@ public interface AdminService {
     ProductAdminResponse getSingleProduct(String productUrl);
 
     Page<ProductAdminResponse> searchProducts(
-            String productName,
-            String categoryName,
-            String brandName,
+            String name,
             Pageable pageable
     );
 
