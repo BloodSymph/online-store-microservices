@@ -339,7 +339,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
                         () -> new BrandNotFoundException(
-                                "Can not update brand by current url: " + brandUrl
+                                "Can not get brand by current url: " + brandUrl
                         )
                 );
 
