@@ -15,6 +15,8 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class BrandRequest {
 
+    private Long version;
+
     @Length(min = 3, max = 30)
     @NotBlank(message = "Brand name should not be empty!")
     private String name;

@@ -21,13 +21,16 @@ public class CategoryServiceImplementation implements CategoryService {
 
     @Override
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
+
         return categoryRepository
                 .findAll(pageable)
                 .map(CategoryMapper::mapToCategoryResponse);
+
     }
 
     @Override
     public CategoryResponse getSingleCategory(String categoryUrl) {
+
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
@@ -35,26 +38,30 @@ public class CategoryServiceImplementation implements CategoryService {
                                 "Can not get category by current url: " + categoryUrl
                         )
                 );
+
         return mapToCategoryResponse(category);
+
     }
 
     @Override
     public Page<CategoryResponse> searchCategories(
-            String name, Pageable pageable
-    ) {
+            String name, Pageable pageable) {
+
         return categoryRepository
                 .searchByNameIgnoreCase(name, pageable)
                 .map(CategoryMapper::mapToCategoryResponse);
+
     }
 
     @Override
     public Page<CategoryResponse> getCategoriesByBrand(
-            String brandUrl, Pageable pageable
-    ) {
+            String brandUrl, Pageable pageable) {
+
         return categoryRepository
                 .findCategoryEntitiesByBrands_UrlIgnoreCase(
                         brandUrl, pageable
                 ).map(CategoryMapper::mapToCategoryResponse);
+
     }
 
 }

@@ -47,6 +47,7 @@ class CategoryRepositoryTest {
         brandEntitySet.add(brand);
 
          category = CategoryEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Category")
                 .url("category")

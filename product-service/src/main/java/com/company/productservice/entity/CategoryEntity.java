@@ -19,6 +19,10 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 public class CategoryEntity {
+
+    @Version
+    private Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

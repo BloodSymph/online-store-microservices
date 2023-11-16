@@ -16,7 +16,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "products")
+@NamedEntityGraph(
+        name = "product-graph-entity-with-product-info",
+        attributeNodes = {
+                @NamedAttributeNode("productInfo")
+        }
+)
 public class ProductEntity {
+
+    @Version
+    private Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

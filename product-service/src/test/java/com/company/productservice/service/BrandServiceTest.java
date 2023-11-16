@@ -41,6 +41,7 @@ class BrandServiceTest {
     void setUp() {
 
         brand = BrandEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Brand")
                 .url("brand")

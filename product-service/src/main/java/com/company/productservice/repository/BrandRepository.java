@@ -1,7 +1,6 @@
 package com.company.productservice.repository;
 
 import com.company.productservice.entity.BrandEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,7 +28,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
 
     Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
 
-    @Transactional
     void deleteByUrlIgnoreCase(String brandUrl);
 
     Boolean existsByUrlIgnoreCase(String brandUrl);

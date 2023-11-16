@@ -15,6 +15,8 @@ import org.hibernate.validator.constraints.URL;
 @NoArgsConstructor
 public class ProductRequest {
 
+    private Long version;
+
     @NotBlank(message = "Product name should not be empty!")
     @Length(min = 3, max = 40)
     private String name;

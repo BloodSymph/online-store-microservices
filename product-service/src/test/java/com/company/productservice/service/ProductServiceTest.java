@@ -44,6 +44,7 @@ class ProductServiceTest {
     void setUp() {
 
         product = ProductEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Product")
                 .url("product")
@@ -90,7 +91,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("Get single product by url test!")
+    @DisplayName("Get single product details by url test!")
     void ProductService_GetSingleProductByUrl_ReturnProductEntity() {
 
         Mockito.lenient().when(
@@ -100,7 +101,7 @@ class ProductServiceTest {
         ).thenReturn(Optional.of(product));
 
         ProductResponse productResponse = productServiceImplementation
-                .getSingleProduct(
+                .getSingleProductDetails(
                         "product"
                 );
 
@@ -120,7 +121,7 @@ class ProductServiceTest {
 
        assertThrows(
                ProductNotFoundException.class,
-               () -> productServiceImplementation.getSingleProduct(
+               () -> productServiceImplementation.getSingleProductDetails(
                        "product1"
                )
        );

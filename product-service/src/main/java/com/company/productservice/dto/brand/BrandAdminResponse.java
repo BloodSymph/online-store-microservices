@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BrandAdminResponse {
 
+    private Long version;
+
     private Long id;
 
     @Length(min = 3, max = 30)

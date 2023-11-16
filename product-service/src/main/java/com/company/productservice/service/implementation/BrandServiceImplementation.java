@@ -21,13 +21,16 @@ public class BrandServiceImplementation implements BrandService {
 
     @Override
     public Page<BrandResponse> getAllBrands(Pageable pageable) {
+
         return brandRepository
                 .findAll(pageable)
                 .map(BrandMapper::mapToBrandResponse);
+
     }
 
     @Override
     public BrandResponse getCurrentBrand(String brandUrl) {
+
         BrandEntity brand = brandRepository
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
@@ -35,26 +38,30 @@ public class BrandServiceImplementation implements BrandService {
                                 "Can not get brand by current url: " + brandUrl
                         )
                 );
+
         return mapToBrandResponse(brand);
+
     }
 
     @Override
     public Page<BrandResponse> searchBrands(
-            String name, Pageable pageable
-    ) {
+            String name, Pageable pageable) {
+
         return brandRepository
                 .searchByNameIgnoreCase(name, pageable)
                 .map(BrandMapper::mapToBrandResponse);
+
     }
 
     @Override
     public Page<BrandResponse> getBrandsByCategory(
-            String categoryUrl, Pageable pageable
-    ) {
+            String categoryUrl, Pageable pageable) {
+
         return brandRepository
                 .findBrandEntitiesByCategories_UrlIgnoreCase(
                         categoryUrl, pageable
                 ).map(BrandMapper::mapToBrandResponse);
+
     }
 
 }

@@ -60,6 +60,7 @@ class ProductRepositoryTest {
         productEntitySet.add(product);
 
         category = CategoryEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Category")
                 .url("category")
@@ -70,6 +71,7 @@ class ProductRepositoryTest {
                 .build();
 
         brand = BrandEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Brand")
                 .url("brand")
@@ -80,6 +82,7 @@ class ProductRepositoryTest {
                 .build();
 
         product = ProductEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Product")
                 .url("product")
@@ -139,7 +142,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Get product by url test!")
+    @DisplayName("Get product info by url test!")
     void ProductRepository_GetProductByUrl_ReturnProductEntity() {
 
         categoryRepository.save(category);

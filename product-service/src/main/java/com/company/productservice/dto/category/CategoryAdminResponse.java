@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CategoryAdminResponse {
 
+    private Long version;
+
     private Long id;
 
     @Length(min = 3, max = 30)

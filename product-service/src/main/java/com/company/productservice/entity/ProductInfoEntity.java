@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "products_info")
 public class ProductInfoEntity {
+
+    @Version
+    private Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

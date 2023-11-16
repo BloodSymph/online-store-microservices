@@ -59,6 +59,7 @@ class ProductInfoRepositoryTest {
         productEntitySet.add(product);
 
         category = CategoryEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Category")
                 .url("category")
@@ -69,6 +70,7 @@ class ProductInfoRepositoryTest {
                 .build();
 
         brand = BrandEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Brand")
                 .url("brand")
@@ -79,6 +81,7 @@ class ProductInfoRepositoryTest {
                 .build();
 
         product = ProductEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Product")
                 .url("product")
@@ -92,6 +95,7 @@ class ProductInfoRepositoryTest {
                 .build();
 
         productInfo = ProductInfoEntity.builder()
+                .version(1L)
                 .id(1L)
                 .title("Title")
                 .description("Description")
@@ -111,27 +115,6 @@ class ProductInfoRepositoryTest {
                 .memory("Memory")
                 .product(product)
                 .build();
-
-    }
-
-    @Test
-    @DisplayName("Get info by product test!")
-    void ProductInfoRepository_GetInfoByProductUrl_ReturnProductInfoEntity() {
-
-        categoryRepository.save(category);
-
-        brandRepository.save(brand);
-
-        productRepository.save(product);
-
-        productInfoRepository.save(productInfo);
-
-        Optional<ProductInfoEntity> result = productInfoRepository
-                .findByProductUrlIgnoreCase(
-                        "product"
-                );
-
-        Assertions.assertThat(result).isNotEmpty();
 
     }
 

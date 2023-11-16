@@ -1,7 +1,6 @@
 package com.company.productservice.repository;
 
 import com.company.productservice.entity.ProductInfoEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +20,6 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfoEntity, 
            @Param("productUrl") String productUrl
     );
 
-    @Transactional
     @Modifying
     @Query(
         "DELETE FROM ProductInfoEntity product_info " +

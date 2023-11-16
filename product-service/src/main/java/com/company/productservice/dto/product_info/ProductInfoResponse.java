@@ -14,6 +14,8 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class ProductInfoResponse {
 
+    private Long version;
+
     private Long id;
 
     @Length(min = 6, max = 50)

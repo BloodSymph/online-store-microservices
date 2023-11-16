@@ -25,17 +25,19 @@ public class CategoryController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return categoryService.getAllCategories(pageable);
+
     }
 
     @GetMapping("/categories/{categoryUrl}/details")
     @ResponseStatus(HttpStatus.OK)
     public CategoryResponse getCategoryDetails(
-            @PathVariable("categoryUrl") String categoryUrl
-    ) {
+            @PathVariable("categoryUrl") String categoryUrl) {
+
         return categoryService.getSingleCategory(categoryUrl);
+
     }
 
     @GetMapping("/categories/search")
@@ -47,11 +49,12 @@ public class CategoryController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return categoryService.searchCategories(
                 name, pageable
         );
+
     }
 
     @GetMapping("/brands/{brandUrl}/categories")
@@ -63,11 +66,12 @@ public class CategoryController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return categoryService.getCategoriesByBrand(
                 brandUrl, pageable
         );
+
     }
 
 }

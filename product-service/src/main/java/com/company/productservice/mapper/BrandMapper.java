@@ -18,6 +18,7 @@ public class BrandMapper {
 
     public static BrandEntity mapRequestToBrandEntity(BrandRequest brandRequest) {
         return BrandEntity.builder()
+                .version(brandRequest.getVersion())
                 .name(brandRequest.getName())
                 .url(brandRequest.getUrl())
                 .build();
@@ -25,6 +26,7 @@ public class BrandMapper {
 
     public static BrandAdminResponse mapToBrandAdminResponse(BrandEntity brand) {
         return BrandAdminResponse.builder()
+                .version(brand.getVersion())
                 .id(brand.getId())
                 .name(brand.getName())
                 .url(brand.getUrl())

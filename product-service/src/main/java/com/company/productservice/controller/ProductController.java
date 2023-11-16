@@ -1,5 +1,6 @@
 package com.company.productservice.controller;
 
+import com.company.productservice.dto.product.ProductDetailsResponse;
 import com.company.productservice.dto.product.ProductResponse;
 import com.company.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +26,19 @@ public class ProductController {
                     direction = Sort.Direction.DESC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return productService.getAllProducts(pageable);
+
     }
 
     @GetMapping("/products/{productUrl}/details")
     @ResponseStatus(HttpStatus.OK)
-    public ProductResponse getProductDetails(
-            @PathVariable("productUrl") String productUrl
-    ) {
-        return productService.getSingleProduct(productUrl);
+    public ProductDetailsResponse getProductDetails(
+            @PathVariable("productUrl") String productUrl) {
+
+        return productService.getSingleProductDetails(productUrl);
+
     }
 
     @GetMapping("/categories/{categoryUrl}/products")
@@ -47,11 +50,12 @@ public class ProductController {
                     direction = Sort.Direction.DESC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return productService.getProductsByCategory(
                 categoryUrl, pageable
         );
+
     }
 
     @GetMapping("/brands/{brandUrl}/products")
@@ -63,11 +67,12 @@ public class ProductController {
                     direction = Sort.Direction.DESC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return productService.getProductsByBrand(
                 brandUrl, pageable
         );
+
     }
 
     @GetMapping("/products/search")
@@ -82,12 +87,13 @@ public class ProductController {
                     direction = Sort.Direction.DESC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return productService.searchProducts(
                 name,
                 pageable
         );
+
     }
 
 }

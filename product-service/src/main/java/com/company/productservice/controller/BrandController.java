@@ -25,17 +25,19 @@ public class BrandController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return brandService.getAllBrands(pageable);
+
     }
 
     @GetMapping("/brands/{brandUrl}/details")
     @ResponseStatus(HttpStatus.OK)
     public BrandResponse getBrandDetails(
-            @PathVariable("brandUrl") String brandUrl
-    ) {
+            @PathVariable("brandUrl") String brandUrl) {
+
         return brandService.getCurrentBrand(brandUrl);
+
     }
 
     @GetMapping("/brands/search")
@@ -47,11 +49,12 @@ public class BrandController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return brandService.searchBrands(
                 name, pageable
         );
+
     }
 
     @GetMapping("/categories/{categoryUrl}/brands")
@@ -63,11 +66,12 @@ public class BrandController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 10
-            ) Pageable pageable
-    ) {
+            ) Pageable pageable) {
+
         return brandService.getBrandsByCategory(
                 categoryUrl, pageable
         );
+
     }
 
 }

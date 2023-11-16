@@ -5,6 +5,7 @@ import com.company.productservice.dto.brand.BrandRequest;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
 import com.company.productservice.dto.product.ProductAdminResponse;
+import com.company.productservice.dto.product.ProductDetailsAdminResponse;
 import com.company.productservice.dto.product.ProductRequest;
 import com.company.productservice.dto.product_info.ProductInfoRequest;
 import com.company.productservice.dto.product_info.ProductInfoResponse;
@@ -56,7 +57,7 @@ public interface AdminService {
 
     Page<ProductAdminResponse> getAllProducts(Pageable pageable);
 
-    ProductAdminResponse getSingleProduct(String productUrl);
+    ProductDetailsAdminResponse getSingleProductDetails(String productUrl);
 
     Page<ProductAdminResponse> searchProducts(
             String name,
@@ -82,8 +83,6 @@ public interface AdminService {
     );
 
     void deleteProduct(String productUrl);
-
-    ProductInfoResponse getProductInfo(String productUrl);
 
     ProductInfoResponse createProductDescription(
             ProductInfoRequest productInfoRequest, String productUrl

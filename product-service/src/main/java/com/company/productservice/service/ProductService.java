@@ -1,5 +1,6 @@
 package com.company.productservice.service;
 
+import com.company.productservice.dto.product.ProductDetailsResponse;
 import com.company.productservice.dto.product.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ public interface ProductService {
 
     Page<ProductResponse> getAllProducts(Pageable pageable);
 
-    ProductResponse getSingleProduct(String productUrl);
+    ProductDetailsResponse getSingleProductDetails(String productUrl);
 
     Page<ProductResponse> getProductsByCategory(
             String categoryUrl,

@@ -44,6 +44,7 @@ class CategoryServiceTest {
     void setUp() {
 
         category = CategoryEntity.builder()
+                .version(1L)
                 .id(1L)
                 .name("Category")
                 .url("category")

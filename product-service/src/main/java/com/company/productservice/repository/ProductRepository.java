@@ -1,9 +1,9 @@
 package com.company.productservice.repository;
 
 import com.company.productservice.entity.ProductEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +33,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
            Pageable pageable
     );
 
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            value = "product-graph-entity-with-product-info"
+    )
     Optional<ProductEntity> findByUrlIgnoreCase(String productUrl);
 
     Page<ProductEntity> searchByNameIgnoreCase(
@@ -40,7 +44,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             Pageable pageable
     );
 
-    @Transactional
     void deleteByUrlIgnoreCase(String productUrl);
 
     Boolean existsByUrlIgnoreCase(String productUrl);

@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class CategoryRequest {
 
+    private Long version;
+
     @Length(min = 3, max = 30)
     @NotBlank(message = "Category name should not be empty!")
     private String name;
