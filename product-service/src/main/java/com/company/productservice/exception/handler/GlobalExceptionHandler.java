@@ -46,17 +46,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ProductInfoNotFoundException.class)
-    public ResponseEntity<ErrorObject> handleProductInfoNotFoundException(
-            ProductInfoNotFoundException exception) {
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
-        errorObject.setMessage(exception.getMessage());
-        errorObject.setTimestamp(new Date());
-        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidVersionException.class)
     public ResponseEntity<ErrorObject> handleInvalidVersionException(

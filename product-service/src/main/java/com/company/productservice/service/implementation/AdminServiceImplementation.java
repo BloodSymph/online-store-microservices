@@ -438,6 +438,7 @@ public class AdminServiceImplementation implements AdminService {
             );
         }
 
+       productInfo.setVersion(productInfoRequest.getVersion());
        productInfo.setTitle(productInfoRequest.getTitle());
        productInfo.setDescription(productInfoRequest.getDescription());
        productInfo.setSeries(productInfoRequest.getSeries());

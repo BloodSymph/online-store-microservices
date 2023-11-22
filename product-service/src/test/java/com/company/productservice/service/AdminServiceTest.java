@@ -1,15 +1,21 @@
 package com.company.productservice.service;
 
+import com.company.productservice.dto.brand.BrandAdminResponse;
 import com.company.productservice.dto.brand.BrandRequest;
 import com.company.productservice.dto.category.CategoryAdminResponse;
 import com.company.productservice.dto.category.CategoryRequest;
+import com.company.productservice.dto.product.ProductAdminResponse;
+import com.company.productservice.dto.product.ProductDetailsAdminResponse;
 import com.company.productservice.dto.product.ProductRequest;
 import com.company.productservice.dto.product_info.ProductInfoRequest;
+import com.company.productservice.dto.product_info.ProductInfoResponse;
 import com.company.productservice.entity.BrandEntity;
 import com.company.productservice.entity.CategoryEntity;
 import com.company.productservice.entity.ProductEntity;
 import com.company.productservice.entity.ProductInfoEntity;
+import com.company.productservice.exception.BrandNotFoundException;
 import com.company.productservice.exception.CategoryNotFoundException;
+import com.company.productservice.exception.ProductNotFoundException;
 import com.company.productservice.repository.BrandRepository;
 import com.company.productservice.repository.CategoryRepository;
 import com.company.productservice.repository.ProductInfoRepository;
@@ -33,7 +39,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminServiceTest {
@@ -138,6 +143,46 @@ class AdminServiceTest {
                         Sort.Direction.ASC, "name"
                 )
         );
+
+        categoryRequest = CategoryRequest.builder()
+                .version(1L)
+                .name("Category")
+                .url("category")
+                .build();
+
+        brandRequest = BrandRequest.builder()
+                .version(1L)
+                .name("Brand")
+                .url("brand")
+                .build();
+
+        productRequest = ProductRequest.builder()
+                .version(1L)
+                .name("Product")
+                .url("product")
+                .price("1000$")
+                .photoUrl("https://productPhoto.com")
+                .build();
+
+        productInfoRequest = ProductInfoRequest.builder()
+                .version(1L)
+                .title("Title")
+                .description("Description")
+                .series("series")
+                .height("15")
+                .width("5")
+                .weight("250")
+                .os("Os")
+                .display("Display")
+                .resolution("Resolution")
+                .cpu("Cpu")
+                .graphicCard("Graphic card")
+                .gpu("Gpu")
+                .ramType("Ram Type")
+                .ram("Ram")
+                .memoryType("Memory Type")
+                .memory("Memory")
+                .build();
 
     }
 
@@ -250,90 +295,492 @@ class AdminServiceTest {
     }
 
     @Test
-    void createCategory() {
+    @DisplayName("Create new category test!")
+    void AdminService_CreateNewCategory_ReturnCategoryAdminResponse() {
 
+        Mockito.lenient().when(
+                categoryRepository.save(Mockito.any(CategoryEntity.class))
+        ).thenReturn(category);
 
+        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
+                .createCategory(
+                        categoryRequest
+                );
+
+        Assertions.assertThat(categoryAdminResponse).isNotNull();
 
     }
 
     @Test
-    void updateCategory() {
+    @DisplayName("Update category test!")
+    void AdminService_UpdateCategory_ReturnCategoryAdminResponse() {
+
+        Mockito.lenient().when(
+                categoryRepository.findByUrlIgnoreCase(
+                        "category"
+                )
+        ).thenReturn(Optional.of(category));
+
+        Mockito.lenient().when(
+                categoryRepository.save(category)
+        ).thenReturn(category);
+
+        CategoryAdminResponse categoryAdminResponse = adminServiceImplementation
+                .updateCategory(
+                        categoryRequest,
+                        "category"
+                );
+
+        Assertions.assertThat(categoryAdminResponse).isNotNull();
+
     }
 
     @Test
-    void deleteCategory() {
+    @DisplayName("Delete category exception test!")
+    void AdminService_DeleteCategoryException_ThrowException() {
+
+        Mockito.lenient().when(
+                categoryRepository.findByUrlIgnoreCase(
+                        "category"
+                )
+        ).thenReturn(Optional.ofNullable(category));
+
+        Mockito.lenient().doNothing()
+                .when(categoryRepository)
+                .deleteByUrlIgnoreCase(
+                        "category"
+                );
+
+        assertThrows(
+                CategoryNotFoundException.class,
+                () -> adminServiceImplementation.deleteCategory(
+                        "category1"
+                )
+        );
+
     }
 
     @Test
-    void getAllBrands() {
+    @DisplayName("Get all brands test!")
+    void AdminService_GetAllBrands_ReturnPageBrandsAdminResponse() {
+
+        List<BrandEntity> brandEntityList = new ArrayList<>();
+        brandEntityList.add(brand);
+
+        Page<BrandEntity> brandEntityPage = new PageImpl<>(brandEntityList);
+
+        Mockito.lenient().when(
+                brandRepository.findAll(pageable)
+        ).thenReturn(brandEntityPage);
+
+        Page<BrandAdminResponse> brandAdminResponses = adminServiceImplementation
+                .getAllBrands(pageable);
+
+        Assertions.assertThat(brandAdminResponses).isNotNull();
+
     }
 
     @Test
-    void getSingleBrand() {
+    @DisplayName("Get single brand test!")
+    void AdminService_GetSingleBrand_ReturnBrandAdminResponse() {
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase(
+                        "brand"
+                )
+        ).thenReturn(Optional.of(brand));
+
+        BrandAdminResponse brandAdminResponse = adminServiceImplementation
+                .getSingleBrand("brand");
+
+        Assertions.assertThat(brandAdminResponse).isNotNull();
+
     }
 
     @Test
-    void getSetOfBrandsByCategory() {
+    @DisplayName("Get single brand throw exception test!")
+    void AdminService_GetSingleBrand_ThrowException() {
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase(
+                        "brand"
+                )
+        ).thenReturn(Optional.of(brand));
+
+        assertThrows(
+                BrandNotFoundException.class,
+                ()-> adminServiceImplementation.getSingleBrand(
+                        "brand1"
+                )
+        );
+
     }
 
     @Test
-    void searchBrands() {
+    @DisplayName("Get brands by category test!")
+    void AdminService_GetBrandsByCategory_ReturnPageBrandAdminResponse() {
+
+        List<BrandEntity> brandEntityList = new ArrayList<>();
+        brandEntityList.add(brand);
+
+        Page<BrandEntity> brandEntityPage = new PageImpl<>(brandEntityList);
+
+        Mockito.lenient().when(
+                brandRepository.findBrandEntitiesByCategories_UrlIgnoreCase(
+                        "category",
+                        pageable
+                )
+        ).thenReturn(brandEntityPage);
+
+        Page<BrandAdminResponse> brandAdminResponses = adminServiceImplementation
+                .getSetOfBrandsByCategory(
+                        "category",
+                        pageable
+                );
+
+        Assertions.assertThat(brandAdminResponses).isNotNull();
+
     }
 
     @Test
-    void createBrand() {
+    @DisplayName("Search brand test!")
+    void AdminService_SearchBrand_ReturnPageBrandAdminResponse() {
+
+        List<BrandEntity> brandEntityList = new ArrayList<>();
+        brandEntityList.add(brand);
+
+        Page<BrandEntity> brandEntityPage = new PageImpl<>(brandEntityList);
+
+        Mockito.lenient().when(
+                brandRepository.searchByNameIgnoreCase(
+                        "brand",
+                        pageable
+                )
+        ).thenReturn(brandEntityPage);
+
+        Page<BrandAdminResponse> brandAdminResponses = adminServiceImplementation
+                .searchBrands(
+                        "brand",
+                        pageable
+                );
+
+        Assertions.assertThat(brandAdminResponses).isNotNull();
+
     }
 
     @Test
-    void updateBrand() {
+    @DisplayName("Create brand test!")
+    void AdminService_CreateBrand_ReturnBrandAdminResponse() {
+
+        Mockito.lenient().when(
+                categoryRepository.findByUrlIgnoreCase(
+                        "category"
+                )
+        ).thenReturn(Optional.of(category));
+
+        Mockito.lenient().when(
+                brandRepository.save(
+                        Mockito.any(BrandEntity.class)
+                )
+        ).thenReturn(brand);
+
+        BrandAdminResponse brandAdminResponse = adminServiceImplementation
+                .createBrand(
+                        brandRequest,
+                        "category"
+                );
+
+        Assertions.assertThat(brandAdminResponse).isNotNull();
+
     }
 
     @Test
-    void deleteBrand() {
+    @DisplayName("Update brand test!")
+    void AdminService_UpdateBrand_ReturnBrandAdminResponse() {
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase("brand")
+        ).thenReturn(Optional.of(brand));
+
+        Mockito.lenient().when(
+                brandRepository.save(brand)
+        ).thenReturn(brand);
+
+        BrandAdminResponse brandAdminResponse = adminServiceImplementation
+                .updateBrand(
+                        brandRequest,
+                        "brand"
+                );
+
+        Assertions.assertThat(brandAdminResponse).isNotNull();
+
     }
 
     @Test
-    void getAllProducts() {
+    @DisplayName("Delete brand throw exception test!")
+    void AdminService_DeleteBrand_ThrowException() {
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase(
+                        "brand"
+                )
+        ).thenReturn(Optional.of(brand));
+
+        Mockito.lenient().doNothing()
+                .when(brandRepository)
+                .deleteByUrlIgnoreCase("brand");
+
+        assertThrows(
+                BrandNotFoundException.class,
+                ()-> adminServiceImplementation.deleteBrand(
+                        "brand1"
+                )
+        );
+
     }
 
     @Test
-    void getSingleProduct() {
+    @DisplayName("Get products test!")
+    void AdminService_GetAllProducts_ReturnPageProductsAdminResponse() {
+
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        productEntityList.add(product);
+
+        Page<ProductEntity> productEntityPage = new PageImpl<>(productEntityList);
+
+        Mockito.lenient().when(
+                productRepository.findAll(pageable)
+        ).thenReturn(productEntityPage);
+
+        Page<ProductAdminResponse> productAdminResponses = adminServiceImplementation
+                .getAllProducts(pageable);
+
+        Assertions.assertThat(productAdminResponses).isNotNull();
+
     }
 
     @Test
-    void searchProducts() {
+    @DisplayName("Get product details test!")
+    void AdminService_GetProductsDetails_ReturnProductDetailsAdminResponse() {
+
+        Mockito.lenient().when(
+                productRepository.findByUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(product));
+
+        ProductDetailsAdminResponse productDetailsAdminResponse = adminServiceImplementation
+                .getSingleProductDetails("product");
+
+        Assertions.assertThat(productDetailsAdminResponse).isNotNull();
+
     }
 
     @Test
-    void getProductsByCategory() {
+    @DisplayName("Get product details throw exception test!")
+    void AdminService_GetProductsDetails_ThrowException() {
+
+        Mockito.lenient().when(
+                productRepository.findByUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(product));
+
+        assertThrows(
+                ProductNotFoundException.class,
+                ()-> adminServiceImplementation.getSingleProductDetails(
+                        "product1"
+                )
+        );
+
     }
 
     @Test
-    void getProductsByBrand() {
+    @DisplayName("Search products test!")
+    void AdminService_SearchProducts_ReturnPageProductsAdminResponse() {
+
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        productEntityList.add(product);
+
+        Page<ProductEntity> productEntityPage = new PageImpl<>(productEntityList);
+
+        Mockito.lenient().when(
+                productRepository.searchByNameIgnoreCase(
+                        "product", pageable
+                )
+        ).thenReturn(productEntityPage);
+
+        Page<ProductAdminResponse> productAdminResponses = adminServiceImplementation
+                .searchProducts(
+                        "product",
+                        pageable
+                );
+
+        Assertions.assertThat(productAdminResponses).isNotNull();
+
     }
 
     @Test
-    void createProduct() {
+    @DisplayName("Get products by category test!")
+    void AdminService_GetProductsByCategory_ReturnPageProductsAdminResponse() {
+
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        productEntityList.add(product);
+
+        Page<ProductEntity> productEntityPage = new PageImpl<>(productEntityList);
+
+        Mockito.lenient().when(
+                productRepository.findByCategoryUrl(
+                        "category",
+                        pageable
+                )
+        ).thenReturn(productEntityPage);
+
+        Page<ProductAdminResponse> productAdminResponses = adminServiceImplementation
+                .getProductsByCategory(
+                        "category",
+                        pageable
+                );
+
+        Assertions.assertThat(productAdminResponses).isNotNull();
+
     }
 
     @Test
-    void updateProduct() {
+    @DisplayName("Get products by brand test!")
+    void AdminService_GetProductsByBrand_ReturnPageProductsAdminResponse() {
+
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        productEntityList.add(product);
+
+        Page<ProductEntity> productEntityPage = new PageImpl<>(productEntityList);
+
+        Mockito.lenient().when(
+                productRepository.findByBrandUrl(
+                        "brand",
+                        pageable
+                )
+        ).thenReturn(productEntityPage);
+
+        Page<ProductAdminResponse> productAdminResponses = adminServiceImplementation
+                .getProductsByBrand(
+                        "brand",
+                        pageable
+                );
+
+        Assertions.assertThat(productAdminResponses).isNotNull();
+
     }
 
     @Test
-    void deleteProduct() {
+    @DisplayName("Create product test!")
+    void AdminService_CreateProduct_ReturnProductAdminResponse() {
+
+        Mockito.lenient().when(
+                categoryRepository.findByUrlIgnoreCase("category")
+        ).thenReturn(Optional.of(category));
+
+        Mockito.lenient().when(
+                brandRepository.findByUrlIgnoreCase("brand")
+        ).thenReturn(Optional.of(brand));
+
+        Mockito.lenient().when(
+                productRepository.save(
+                        Mockito.any(ProductEntity.class)
+                )
+        ).thenReturn(product);
+
+        ProductAdminResponse productAdminResponse = adminServiceImplementation
+                .createProduct(
+                        productRequest,
+                        "category",
+                        "brand"
+                );
+
+        Assertions.assertThat(productAdminResponse).isNotNull();
+
     }
 
     @Test
-    void createProductDescription() {
+    @DisplayName("Update product test!")
+    void AdminService_UpdateProduct_ReturnProductAdminResponse() {
+
+        Mockito.lenient().when(
+                productRepository.findByUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(product));
+
+        Mockito.lenient().when(
+                productRepository.save(product)
+        ).thenReturn(product);
+
+        ProductAdminResponse productAdminResponse = adminServiceImplementation
+                .updateProduct(
+                        productRequest,
+                        "product"
+                );
+
+        Assertions.assertThat(productAdminResponse).isNotNull();
+
     }
 
     @Test
-    void updateProductDescription() {
+    @DisplayName("Delete product throw exception test!")
+    void AdminService_DeleteProduct_ThrowException() {
+
+        Mockito.lenient().when(
+                productRepository.findByUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(product));
+
+        Mockito.lenient().doNothing()
+                .when(productRepository)
+                .deleteByUrlIgnoreCase("product");
+
+        assertThrows(
+                ProductNotFoundException.class,
+                ()-> adminServiceImplementation.deleteProduct(
+                        "product1"
+                )
+        );
+
     }
 
     @Test
-    void deleteProductDescription() {
+    @DisplayName("Create product description test!")
+    void AdminService_CreateProductDescription_ReturnProductInfoResponse() {
+
+        Mockito.lenient().when(
+                productRepository.findByUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(product));
+
+        Mockito.lenient().when(
+                productInfoRepository.save(
+                        Mockito.any(ProductInfoEntity.class)
+                )
+        ).thenReturn(productInfo);
+
+        ProductInfoResponse productInfoResponse = adminServiceImplementation
+                .createProductDescription(
+                        productInfoRequest,
+                        "product"
+                );
+
+        Assertions.assertThat(productInfoResponse).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Delete product description throw exception test!")
+    void AdminService_DeleteProductDescription() {
+
+        Mockito.lenient().when(
+                productInfoRepository.findByProductUrlIgnoreCase("product")
+        ).thenReturn(Optional.of(productInfo));
+
+        Mockito.lenient().doNothing()
+                .when(productInfoRepository)
+                .deleteByProductUrl("product");
+
+        assertThrows(
+                ProductNotFoundException.class,
+                ()-> adminServiceImplementation.deleteProductDescription("product1")
+        );
+
     }
 
 }
