@@ -2,9 +2,16 @@ package com.company.productservice.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@WebMvcTest(controllers = AdminController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(MockitoExtension.class)
 class AdminControllerTest {
 
     @BeforeEach
@@ -12,47 +19,13 @@ class AdminControllerTest {
     }
 
     @Test
-    void getCategoryList() {
-    }
+    void createCategory() {
 
-    @Test
-    void searchCategoriesByName() {
-    }
-
-    @Test
-    void getCategoryDetails() {
-    }
-
-    @Test
-    void getBrandsByCategory() {
-    }
-
-    @Test
-    void createNewCategory() {
     }
 
     @Test
     void updateCategory() {
-    }
 
-    @Test
-    void deleteCategory() {
-    }
-
-    @Test
-    void getBrandList() {
-    }
-
-    @Test
-    void getBrandDetails() {
-    }
-
-    @Test
-    void getCategoriesByBrand() {
-    }
-
-    @Test
-    void searchBrands() {
     }
 
     @Test
@@ -64,30 +37,6 @@ class AdminControllerTest {
     }
 
     @Test
-    void deleteBrand() {
-    }
-
-    @Test
-    void getProductsList() {
-    }
-
-    @Test
-    void getProductsDetails() {
-    }
-
-    @Test
-    void searchProducts() {
-    }
-
-    @Test
-    void getProductsByCategory() {
-    }
-
-    @Test
-    void getProductsByBrand() {
-    }
-
-    @Test
     void createProduct() {
     }
 
@@ -95,9 +44,6 @@ class AdminControllerTest {
     void updateProduct() {
     }
 
-    @Test
-    void deleteProduct() {
-    }
 
     @Test
     void createProductInformation() {
@@ -110,4 +56,5 @@ class AdminControllerTest {
     @Test
     void deleteProductInformation() {
     }
+
 }
