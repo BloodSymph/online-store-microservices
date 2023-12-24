@@ -18,7 +18,6 @@ public class CategoryMapper {
 
     public static CategoryAdminResponse mapToCategoryAdminResponse(CategoryEntity category) {
         return CategoryAdminResponse.builder()
-                .version(category.getVersion())
                 .id(category.getId())
                 .name(category.getName())
                 .url(category.getUrl())

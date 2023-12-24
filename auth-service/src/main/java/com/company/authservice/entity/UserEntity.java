@@ -18,6 +18,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@NamedEntityGraph(
+        name = "user-graph-entity-with-profile",
+        attributeNodes = {
+                @NamedAttributeNode("profileEntity")
+        }
+)
 public class UserEntity {
 
     @Version

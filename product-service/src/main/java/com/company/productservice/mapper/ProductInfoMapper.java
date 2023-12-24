@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 public class ProductInfoMapper {
     public static ProductInfoResponse mapToProductInfoResponse(ProductInfoEntity productInfo) {
         return ProductInfoResponse.builder()
-                .version(productInfo.getVersion())
                 .id(productInfo.getId())
                 .title(productInfo.getTitle())
                 .description(productInfo.getDescription())

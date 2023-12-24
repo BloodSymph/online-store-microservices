@@ -17,11 +17,11 @@ public class BrandRequest {
 
     private Long version;
 
-    @Length(min = 3, max = 30)
+    @Length(min = 3, max = 30, message = "Name should be minimum of {min} and maximum of {max} characters!")
     @NotBlank(message = "Brand name should not be empty!")
     private String name;
 
-    @Length(min = 3, max = 20)
+    @Length(min = 3, max = 20, message = "Url should be minimum of {min} and maximum of {max} characters!")
     private String url;
 
 }

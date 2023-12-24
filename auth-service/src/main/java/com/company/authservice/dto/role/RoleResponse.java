@@ -1,10 +1,12 @@
-package com.company.productservice.dto.brand;
+package com.company.authservice.dto.role;
 
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -13,13 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrandAdminResponse {
+public class RoleResponse {
 
     private Long id;
 
     private String name;
-
-    private String url;
 
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
     private LocalDateTime createdAt;

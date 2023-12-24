@@ -42,7 +42,6 @@ public class ProductMapper {
             ProductEntity product) {
 
             return ProductDetailsAdminResponse.builder()
-                    .version(product.getVersion())
                     .id(product.getId())
                     .name(product.getName())
                     .url(product.getUrl())
@@ -76,7 +75,6 @@ public class ProductMapper {
             ProductEntity product) {
 
         return ProductAdminResponse.builder()
-                .version(product.getVersion())
                 .id(product.getId())
                 .name(product.getName())
                 .url(product.getUrl())

@@ -68,7 +68,6 @@ class AdminControllerTest {
 
         categoryAdminResponse = CategoryAdminResponse.builder()
                 .id(1L)
-                .version(1L)
                 .name("Category")
                 .url("category")
                 .createdAt(LocalDateTime.now())
@@ -83,7 +82,6 @@ class AdminControllerTest {
 
         brandAdminResponse = BrandAdminResponse.builder()
                 .id(1L)
-                .version(1L)
                 .name("Brand")
                 .url("brand")
                 .createdAt(LocalDateTime.now())
@@ -98,7 +96,6 @@ class AdminControllerTest {
 
         productAdminResponse = ProductAdminResponse.builder()
                 .id(1L)
-                .version(1L)
                 .name("Product")
                 .url("product")
                 .price("100$")
