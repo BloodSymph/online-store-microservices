@@ -1,5 +1,6 @@
 package com.company.authservice.dto.user;
 
+import com.company.authservice.validator.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,7 +30,7 @@ public class UserRequest {
 
     @NotEmpty
     @NotBlank(message = "Password should not be empty!")
-    // TODO: 24.12.2023 Create Password validation
+    @ValidPassword
     private String password;
 
 }

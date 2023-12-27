@@ -1,5 +1,6 @@
 package com.company.authservice.dto.auth;
 
+import com.company.authservice.validator.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class LoginDto {
 
     @NotEmpty
     @NotBlank(message = "Password should not be empty!")
-    // TODO: 24.12.2023 Create Password validation
+    @ValidPassword
     private String password;
 
 }

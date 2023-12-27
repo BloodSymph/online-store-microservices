@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JWTGenerator {
 
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.ES512);
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generatedToken(Authentication authentication) {
 
