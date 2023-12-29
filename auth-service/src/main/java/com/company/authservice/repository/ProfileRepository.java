@@ -12,12 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
-   @Modifying
-   @Query(
-           "DELETE FROM ProfileEntity profile " +
-           "WHERE profile.user.username LIKE LOWER(:username) "
-   )
-   Optional<ProfileEntity> deleteByUser_UsernameLowerCase(String username);
+   Optional<ProfileEntity> findByUser_Username(String username);
+
+   Optional<ProfileEntity> deleteByUser_Username(String username);
 
    Boolean existsByUser_Username(String username);
 

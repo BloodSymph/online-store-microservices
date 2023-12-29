@@ -1,6 +1,6 @@
 package com.company.authservice.security;
 
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -24,12 +24,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    private JWTAuthEntryPoint jwtAuthEntryPoint;
-
-    private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -97,13 +92,22 @@ public class SecurityConfig {
                 authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/v1/auth-service/client"
+                                "/api/v1/auth-service/client/**"
                         )
                         .permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth-service/profile/**"
+                        ).authenticated()
+                        .requestMatchers(
+                                "/api/v1/auth-service/admin/**"
+                        ).hasAuthority("ROLE_ADMIN")
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/product-service/client/**"
                         ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/product-service/admin/**"
+                        ).hasAuthority("ROLE_ADMIN")
         ).addFilterBefore(
                 jwtAuthFilter(),
                 UsernamePasswordAuthenticationFilter.class

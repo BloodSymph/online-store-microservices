@@ -28,15 +28,15 @@ import static com.company.authservice.mapper.AuthMapper.mapToSignupDto;
 @RequiredArgsConstructor
 public class AuthServiceImplementation implements AuthService {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private JWTGenerator jwtGenerator;
+    private final JWTGenerator jwtGenerator;
 
     @Override
     public SignupDto registerNewUser(SignupDto signupDto) {

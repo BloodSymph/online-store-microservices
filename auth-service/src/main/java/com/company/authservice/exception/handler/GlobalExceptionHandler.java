@@ -1,5 +1,6 @@
 package com.company.authservice.exception.handler;
 
+import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.exception.RoleNotFoundException;
 import com.company.authservice.exception.UsernameIsTakenException;
 import com.company.authservice.exception.oblect.ErrorObject;
@@ -31,6 +32,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ErrorObject> handelRoleNotFoundException(
             RoleNotFoundException exception) {
+
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(exception.getMessage());
+        errorObject.setTimestamp(new Date());
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
+
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProfileNotFoundException.class)
+    public ResponseEntity<ErrorObject> handelProfileNotFoundException(
+            ProfileNotFoundException exception) {
 
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());

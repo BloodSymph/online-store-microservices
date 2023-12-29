@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(Set<RoleEntity> roleEntities) {
         return roleEntities.stream()
@@ -38,7 +38,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserEntity user = userRepository
                 .findByUsername(username)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException("Username not found!")
+                        () -> new UsernameNotFoundException(
+                                "Username not found!"
+                        )
                 );
 
         return new User(
