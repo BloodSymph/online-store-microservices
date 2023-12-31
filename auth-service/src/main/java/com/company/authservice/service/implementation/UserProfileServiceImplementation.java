@@ -8,6 +8,7 @@ import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.repository.ProfileRepository;
 import com.company.authservice.repository.UserRepository;
 import com.company.authservice.service.UserProfileService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
+    @Transactional
     public void deleteProfile() {
 
         String usernameFromSession = getSessionUser();

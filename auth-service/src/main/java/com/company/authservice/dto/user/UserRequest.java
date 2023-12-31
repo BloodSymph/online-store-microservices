@@ -1,5 +1,6 @@
 package com.company.authservice.dto.user;
 
+import com.company.authservice.dto.role.RoleRequest;
 import com.company.authservice.validator.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.Set;
 
 @Data
 @Builder

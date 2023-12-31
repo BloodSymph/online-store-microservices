@@ -1,6 +1,5 @@
 package com.company.authservice.mapper;
 
-import com.company.authservice.dto.user.CurrentUserDetailsResponse;
 import com.company.authservice.dto.user.UserAdminResponse;
 import com.company.authservice.dto.user.UserDetailsAdminResponse;
 import com.company.authservice.dto.user.UserRequest;
@@ -41,18 +40,6 @@ public class UserMapper {
                         user.getRoles()
                                 .stream().map(RoleMapper::mapToRoleResponse)
                                 .collect(Collectors.toSet())
-                )
-                .build();
-    }
-
-    public static CurrentUserDetailsResponse mapToCurrentUserResponse(UserEntity user) {
-        return CurrentUserDetailsResponse.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .profile(
-                        mapToProfileResponse(
-                                user.getProfileEntity()
-                        )
                 )
                 .build();
     }

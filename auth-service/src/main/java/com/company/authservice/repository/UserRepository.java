@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     )
     Optional<UserEntity> findByUsernameIgnoreCase(String username);
 
-    Optional<UserEntity> deleteByUsernameIgnoreCase(String username);
+    void deleteByUsernameIgnoreCase(String username);
 
     Boolean existsByUsernameIgnoreCase(String username);
 
