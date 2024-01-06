@@ -1,5 +1,6 @@
 package com.company.authservice.exception.handler;
 
+import com.company.authservice.exception.InvalidVersionException;
 import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.exception.RoleNotFoundException;
 import com.company.authservice.exception.UsernameIsTakenException;
@@ -51,6 +52,19 @@ public class GlobalExceptionHandler {
         errorObject.setMessage(exception.getMessage());
         errorObject.setTimestamp(new Date());
         return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
+
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProfileNotFoundException.class)
+    public ResponseEntity<ErrorObject> handelInvalidVersionException(
+            InvalidVersionException exception) {
+
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorObject.setMessage(exception.getMessage());
+        errorObject.setTimestamp(new Date());
+        return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
 
     }
 

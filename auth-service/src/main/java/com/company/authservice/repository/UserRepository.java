@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            value = "user-graph-entity-with-profile"
+            value = "user-graph-entity-with-profile-and-roles"
     )
     Optional<UserEntity> findByUsernameIgnoreCase(String username);
 

@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .findByUsername(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "Username not found!"
+                                "Can not find user with current username: " + username
                         )
                 );
 

@@ -1,6 +1,7 @@
 package com.company.authservice.controller;
 
 import com.company.authservice.service.AdminService;
+import com.company.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,5 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     private final AdminService adminService;
+
+    private final AuthService authService;
 
 }

@@ -6,6 +6,7 @@ import com.company.authservice.dto.role.RoleResponse;
 import com.company.authservice.dto.user.UserAdminResponse;
 import com.company.authservice.dto.user.UserDetailsAdminResponse;
 import com.company.authservice.dto.user.UserRequest;
+import com.company.authservice.repository.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,17 @@ public interface AdminService {
             Pageable pageable, String username
     );
 
-    UserAdminResponse addNewUserWithAdminPermission(UserRequest userRequest);
+    UserAdminResponse updateUserInformation(
+            UserRequest userRequest, String username
+    );
+
+    UserDetailsAdminResponse givePermissionForUser(
+            String username, String name
+    );
+
+    void deletePermissionForUser(
+            String username
+    );
 
     void deleteUser(String username);
 
@@ -33,7 +44,13 @@ public interface AdminService {
         Role admin methods
     */
 
+    Page<RoleResponse> getAllRoles(Pageable pageable);
+
     RoleResponse addNewRole(RoleRequest roleRequest);
+
+    RoleResponse updateCurrentRole(
+            RoleRequest roleRequest, String name
+    );
 
     void deleteRole(String name);
 

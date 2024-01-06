@@ -8,8 +8,10 @@ import com.company.authservice.dto.user.UserDetailsAdminResponse;
 import com.company.authservice.dto.user.UserRequest;
 import com.company.authservice.entity.RoleEntity;
 import com.company.authservice.entity.UserEntity;
+import com.company.authservice.exception.InvalidVersionException;
 import com.company.authservice.exception.RoleNotFoundException;
 import com.company.authservice.exception.UsernameIsTakenException;
+import com.company.authservice.mapper.RoleMapper;
 import com.company.authservice.mapper.UserMapper;
 import com.company.authservice.repository.ProfileRepository;
 import com.company.authservice.repository.RoleRepository;
@@ -24,6 +26,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collections;
+import java.util.List;
+
+import static com.company.authservice.mapper.RoleMapper.mapToRole;
+import static com.company.authservice.mapper.RoleMapper.mapToRoleResponse;
+import static com.company.authservice.mapper.UserMapper.mapToUserAdminResponse;
 import static com.company.authservice.mapper.UserMapper.mapToUserDetailsAdminResponse;
 
 
@@ -76,9 +84,68 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public UserAdminResponse addNewUserWithAdminPermission(UserRequest userRequest) {
+    public UserAdminResponse updateUserInformation(UserRequest userRequest, String username) {
 
-        return null;
+        UserEntity user = userRepository
+                .findByUsername(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user with current username: " + username
+                        )
+                );
+
+        if (!userRequest.getVersion().equals(user.getVersion())) {
+            throw new InvalidVersionException(
+                    "Bad request for update! Invalid Entity Version!"
+            );
+        }
+
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(
+                passwordEncoder.encode(
+                        userRequest.getPassword()
+                )
+        );
+
+        UserEntity updatedUserInformation = userRepository.save(user);
+
+        return mapToUserAdminResponse(updatedUserInformation);
+
+    }
+
+    @Override
+    public UserDetailsAdminResponse givePermissionForUser(String username, String name) {
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user with current username: " + username
+                        )
+                );
+
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(name)
+                .orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find rol with current name: " + name
+                        )
+                );
+
+        user.setRoles(Collections.singleton(role));
+
+        UserEntity updatedUserRole = userRepository.save(user);
+
+        return mapToUserDetailsAdminResponse(updatedUserRole);
+
+    }
+
+    @Override
+    @Transactional
+    public void deletePermissionForUser(String username) {
+
+
 
     }
 
@@ -88,7 +155,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!userRepository.existsByUsernameIgnoreCase(username)) {
             throw new UsernameNotFoundException(
-                "Username not found!"
+                    "Can not find user with current username: " + username
             );
         }
 
@@ -97,13 +164,61 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    public Page<RoleResponse> getAllRoles(Pageable pageable) {
+
+        return roleRepository
+                .findAll(pageable)
+                .map(RoleMapper::mapToRoleResponse);
+
+    }
+
+
+    @Override
     public RoleResponse addNewRole(RoleRequest roleRequest) {
-        return null;
+
+        RoleEntity role = mapToRole(roleRequest);
+
+        roleRepository.save(role);
+
+        return mapToRoleResponse(role);
+    }
+
+    @Override
+    public RoleResponse updateCurrentRole(RoleRequest roleRequest, String name) {
+
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(name)
+                .orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find rol with current name: " + name
+                        )
+                );
+
+        if(!roleRequest.getVersion().equals(role.getVersion())) {
+            throw new InvalidVersionException(
+                    "Bad request for update! Invalid Entity Version!"
+            );
+        }
+
+        role.setName(roleRequest.getName());
+
+        RoleEntity updatedRole = roleRepository.save(role);
+
+        return mapToRoleResponse(updatedRole);
+
     }
 
     @Override
     @Transactional
     public void deleteRole(String name) {
+
+        if (!roleRepository.existsByNameIgnoreCase(name)) {
+            throw new RoleNotFoundException(
+                    "Can not find rol with current name: " + name
+            );
+        }
+
+        roleRepository.deleteByNameIgnoreCase(name);
 
     }
 

@@ -19,9 +19,10 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NamedEntityGraph(
-        name = "user-graph-entity-with-profile",
+        name = "user-graph-entity-with-profile-and-roles",
         attributeNodes = {
-                @NamedAttributeNode("profileEntity")
+                @NamedAttributeNode("profileEntity"),
+                @NamedAttributeNode("roles")
         }
 )
 public class UserEntity {
