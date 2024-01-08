@@ -1,6 +1,8 @@
 package com.company.authservice.service;
 
 import com.company.authservice.dto.auth.SignupDto;
+import com.company.authservice.dto.profile.ProfileRequest;
+import com.company.authservice.dto.profile.ProfileResponse;
 import com.company.authservice.dto.role.RoleRequest;
 import com.company.authservice.dto.role.RoleResponse;
 import com.company.authservice.dto.user.UserAdminResponse;
@@ -13,10 +15,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AdminService {
-
-    /*
-        User admin methods
-    */
 
     Page<UserAdminResponse> getAllUsers(Pageable pageable);
 
@@ -34,15 +32,13 @@ public interface AdminService {
             String username, String name
     );
 
-    void deletePermissionForUser(
-            String username
+    void removePermissionForUser(
+            String username, String name
     );
 
-    void deleteUser(String username);
+    void removeAllPermissionsForUser(String username);
 
-    /*
-        Role admin methods
-    */
+    void deleteUser(String username);
 
     Page<RoleResponse> getAllRoles(Pageable pageable);
 
@@ -54,8 +50,16 @@ public interface AdminService {
 
     void deleteRole(String name);
 
-    /*
-        Profile admin methods
-    */
+    ProfileResponse getProfileOfUser(String username);
+
+    ProfileResponse createProfileForUser(
+            ProfileRequest profileRequest, String username
+    );
+
+    ProfileResponse updateProfileForUser(
+            ProfileRequest profileRequest, String username
+    );
+
+    void deleteProfileForUser(String username);
 
 }

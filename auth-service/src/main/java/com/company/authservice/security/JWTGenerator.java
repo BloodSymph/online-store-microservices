@@ -64,7 +64,7 @@ public class JWTGenerator {
         } catch (Exception exception) {
 
             throw new AuthenticationCredentialsNotFoundException(
-                    "JWT was expired or incorrect",
+                    "JWT was expired or incorrect!",
                     exception.fillInStackTrace()
             );
 

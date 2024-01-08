@@ -1,14 +1,18 @@
 package com.company.authservice.service.implementation;
 
 import com.company.authservice.dto.auth.SignupDto;
+import com.company.authservice.dto.profile.ProfileRequest;
+import com.company.authservice.dto.profile.ProfileResponse;
 import com.company.authservice.dto.role.RoleRequest;
 import com.company.authservice.dto.role.RoleResponse;
 import com.company.authservice.dto.user.UserAdminResponse;
 import com.company.authservice.dto.user.UserDetailsAdminResponse;
 import com.company.authservice.dto.user.UserRequest;
+import com.company.authservice.entity.ProfileEntity;
 import com.company.authservice.entity.RoleEntity;
 import com.company.authservice.entity.UserEntity;
 import com.company.authservice.exception.InvalidVersionException;
+import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.exception.RoleNotFoundException;
 import com.company.authservice.exception.UsernameIsTakenException;
 import com.company.authservice.mapper.RoleMapper;
@@ -29,6 +33,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+import static com.company.authservice.mapper.ProfileMapper.mapToProfile;
+import static com.company.authservice.mapper.ProfileMapper.mapToProfileResponse;
 import static com.company.authservice.mapper.RoleMapper.mapToRole;
 import static com.company.authservice.mapper.RoleMapper.mapToRoleResponse;
 import static com.company.authservice.mapper.UserMapper.mapToUserAdminResponse;
@@ -62,10 +68,10 @@ public class AdminServiceImplementation implements AdminService {
     public UserDetailsAdminResponse getUserDetails(String username) {
 
         UserEntity user = userRepository
-                .findByUsernameIgnoreCase(username)
+                .getUserDetails(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "Can not find user with current username: " + username
+                                "Can not find user with current username: " + username + " !"
                         )
                 );
 
@@ -84,13 +90,14 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public UserAdminResponse updateUserInformation(UserRequest userRequest, String username) {
+    public UserAdminResponse updateUserInformation(
+            UserRequest userRequest, String username) {
 
         UserEntity user = userRepository
-                .findByUsername(username)
+                .findByUsernameIgnoreCase(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "Can not find user with current username: " + username
+                                "Can not find user with current username: " + username + " !"
                         )
                 );
 
@@ -115,13 +122,14 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public UserDetailsAdminResponse givePermissionForUser(String username, String name) {
+    public UserDetailsAdminResponse givePermissionForUser(
+            String username, String name) {
 
         UserEntity user = userRepository
-                .findByUsernameIgnoreCase(username)
+                .getUserDetails(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "Can not find user with current username: " + username
+                                "Can not find user with current username: " + username + " !"
                         )
                 );
 
@@ -129,11 +137,11 @@ public class AdminServiceImplementation implements AdminService {
                 .findByNameIgnoreCase(name)
                 .orElseThrow(
                         () -> new RoleNotFoundException(
-                                "Can not find rol with current name: " + name
+                                "Can not find rol with current name: " + name + " !"
                         )
                 );
 
-        user.setRoles(Collections.singleton(role));
+        user.getRoles().add(role);
 
         UserEntity updatedUserRole = userRepository.save(user);
 
@@ -142,10 +150,45 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional
-    public void deletePermissionForUser(String username) {
+    public void removePermissionForUser(
+            String username, String name) {
 
+        UserEntity user = userRepository
+                .getUserDetails(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user with current username: " + username + " !"
+                        )
+                );
 
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(name)
+                .orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find rol with current name: " + name + " !"
+                        )
+                );
+
+        user.getRoles().remove(role);
+
+        userRepository.save(user);
+
+    }
+
+    @Override
+    public void removeAllPermissionsForUser(String username) {
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user with current username: " + username + " !"
+                        )
+                );
+
+        user.setRoles(Collections.emptySet());
+
+        userRepository.save(user);
 
     }
 
@@ -155,7 +198,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!userRepository.existsByUsernameIgnoreCase(username)) {
             throw new UsernameNotFoundException(
-                    "Can not find user with current username: " + username
+                    "Can not find user with current username: " + username + " !"
             );
         }
 
@@ -184,13 +227,14 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    public RoleResponse updateCurrentRole(RoleRequest roleRequest, String name) {
+    public RoleResponse updateCurrentRole(
+            RoleRequest roleRequest, String name) {
 
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(name)
                 .orElseThrow(
                         () -> new RoleNotFoundException(
-                                "Can not find rol with current name: " + name
+                                "Can not find rol with current name: " + name + " !"
                         )
                 );
 
@@ -214,11 +258,93 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!roleRepository.existsByNameIgnoreCase(name)) {
             throw new RoleNotFoundException(
-                    "Can not find rol with current name: " + name
+                    "Can not find rol with current name: " + name + " !"
             );
         }
 
         roleRepository.deleteByNameIgnoreCase(name);
+
+    }
+
+    @Override
+    public ProfileResponse getProfileOfUser(String username) {
+
+        ProfileEntity profileEntity = profileRepository
+                .findByUser_Username(username)
+                .orElseThrow(
+                        () -> new ProfileNotFoundException(
+                                "Can not find user profile by current username: " + username + " !"
+                        )
+                );
+
+        return mapToProfileResponse(profileEntity);
+
+    }
+
+    @Override
+    public ProfileResponse createProfileForUser(
+            ProfileRequest profileRequest, String username) {
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user with current username: " + username + " !"
+                        )
+                );
+
+        ProfileEntity profileEntity = mapToProfile(profileRequest);
+        profileEntity.setUser(user);
+
+        profileRepository.save(profileEntity);
+
+        return mapToProfileResponse(profileEntity);
+
+    }
+
+    @Override
+    public ProfileResponse updateProfileForUser(
+            ProfileRequest profileRequest, String username) {
+
+        ProfileEntity profileEntity = profileRepository
+                .findByUser_Username(username)
+                .orElseThrow(
+                        () -> new ProfileNotFoundException(
+                                "Can not find profile by current username: " + username + " !"
+                        )
+                );
+
+        if (!profileEntity.getVersion().equals(profileRequest.getVersion())) {
+            throw new InvalidVersionException(
+                    "Bad request for update! Invalid Entity Version!"
+            );
+        }
+
+        profileEntity.setFirstName(profileRequest.getFirstName());
+        profileEntity.setLastName(profileRequest.getLastName());
+        profileEntity.setPhoneNumber(profileRequest.getPhoneNumber());
+        profileEntity.setCountry(profileRequest.getCountry());
+        profileEntity.setCity(profileRequest.getCity());
+        profileEntity.setAddress(profileRequest.getAddress());
+        profileEntity.setMailAddress(profileRequest.getMailAddress());
+
+        ProfileEntity updatedProfile = profileRepository.save(profileEntity);
+
+        return mapToProfileResponse(updatedProfile);
+
+    }
+
+    @Override
+    @Transactional
+    public void deleteProfileForUser(String username) {
+
+        if (!profileRepository.existsByUser_Username(username)) {
+            throw new ProfileNotFoundException(
+                    "Can not find user profile by current username: " + username + " !"
+            );
+        }
+
+        profileRepository.deleteByUser_Username(username);
 
     }
 

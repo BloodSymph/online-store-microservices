@@ -58,7 +58,7 @@ public class AuthServiceImplementation implements AuthService {
         );
 
         RoleEntity role = roleRepository
-                .findByName("ROLE_USER")
+                .findByNameIgnoreCase("ROLE_USER")
                 .orElseThrow(
                 () -> new RoleNotFoundException(
                         "Role name dose not exist"

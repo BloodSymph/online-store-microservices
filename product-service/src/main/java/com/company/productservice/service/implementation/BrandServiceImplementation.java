@@ -35,7 +35,7 @@ public class BrandServiceImplementation implements BrandService {
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
                         () -> new BrandNotFoundException(
-                                "Can not get brand by current url: " + brandUrl
+                                "Can not get brand by current url: " + brandUrl + " !"
                         )
                 );
 

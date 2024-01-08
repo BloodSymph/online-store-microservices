@@ -36,10 +36,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity user = userRepository
-                .findByUsername(username)
+                .findByUsernameIgnoreCase(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "Can not find user with current username: " + username
+                                "Can not find user with current username: " + username + " !"
                         )
                 );
 

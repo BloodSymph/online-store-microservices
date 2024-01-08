@@ -82,7 +82,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
                         () -> new CategoryNotFoundException(
-                                "Can not get category by current url: " + categoryUrl
+                                "Can not get category by current url: " + categoryUrl + " !"
                         )
                 );
 
@@ -121,7 +121,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
                         ()-> new CategoryNotFoundException(
-                                "Can not update category with current url: " + categoryUrl
+                                "Can not update category with current url: " + categoryUrl + " !"
                         )
                 );
 
@@ -146,7 +146,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {
             throw new CategoryNotFoundException(
-                    "Can not delete category by current url: " + categoryUrl
+                    "Can not delete category by current url: " + categoryUrl + " !"
             );
         }
 
@@ -180,7 +180,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
                         () -> new BrandNotFoundException(
-                                "Can not get brand by current url: " + brandUrl
+                                "Can not get brand by current url: " + brandUrl + " !"
                         )
                 );
 
@@ -206,7 +206,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
                         ()-> new CategoryNotFoundException(
-                                "Can not get category with current url: " + categoryUrl
+                                "Can not get category with current url: " + categoryUrl + " !"
                         )
                 );
 
@@ -232,7 +232,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
                         () -> new BrandNotFoundException(
-                                "Can not update brand by current url: " + brandUrl
+                                "Can not update brand by current url: " + brandUrl + " !"
                         )
                 );
 
@@ -257,7 +257,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!brandRepository.existsByUrlIgnoreCase(brandUrl)) {
             throw new BrandNotFoundException(
-                    "Can not delete brand by current url: " + brandUrl
+                    "Can not delete brand by current url: " + brandUrl + " !"
             );
         }
 
@@ -281,7 +281,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not get product by current url: " + productUrl
+                                "Can not get product by current url: " + productUrl + " !"
                         )
                 );
 
@@ -330,7 +330,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
                         ()-> new CategoryNotFoundException(
-                                "Can not get category with current url: " + categoryUrl
+                                "Can not get category with current url: " + categoryUrl + " !"
                         )
                 );
 
@@ -339,7 +339,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
                         () -> new BrandNotFoundException(
-                                "Can not get brand by current url: " + brandUrl
+                                "Can not get brand by current url: " + brandUrl + " !"
                         )
                 );
 
@@ -363,7 +363,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not update product by current url: " + productUrl
+                                "Can not update product by current url: " + productUrl + " !"
                         )
                 );
 
@@ -390,7 +390,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!productRepository.existsByUrlIgnoreCase(productUrl)) {
             throw new ProductNotFoundException(
-                    "Can not delete product by current url: " + productUrl
+                    "Can not delete product by current url: " + productUrl + " !"
             );
         }
 
@@ -406,7 +406,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not get product by current url: " + productUrl
+                                "Can not get product by current url: " + productUrl + " !"
                         )
                 );
 
@@ -428,7 +428,7 @@ public class AdminServiceImplementation implements AdminService {
                 .findByProductUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not get product info by current product url: " + productUrl
+                                "Can not get product info by current product url: " + productUrl + " !"
                         )
                 );
 
@@ -468,7 +468,7 @@ public class AdminServiceImplementation implements AdminService {
 
         if (!productInfoRepository.existsByProductUrl(productUrl)) {
             throw new ProductNotFoundException(
-                    "Can not delete product info by current product url: " + productUrl
+                    "Can not delete product info by current product url: " + productUrl + " !"
             );
         }
 

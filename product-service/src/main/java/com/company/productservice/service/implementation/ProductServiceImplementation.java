@@ -37,7 +37,7 @@ public class ProductServiceImplementation implements ProductService {
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not get product by current url: " + productUrl
+                                "Can not get product by current url: " + productUrl + " !"
                         )
                 );
 

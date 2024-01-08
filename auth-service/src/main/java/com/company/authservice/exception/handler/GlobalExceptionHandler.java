@@ -7,13 +7,14 @@ import com.company.authservice.exception.UsernameIsTakenException;
 import com.company.authservice.exception.oblect.ErrorObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Date;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ProfileNotFoundException.class)
+    @ExceptionHandler(InvalidVersionException.class)
     public ResponseEntity<ErrorObject> handelInvalidVersionException(
             InvalidVersionException exception) {
 

@@ -35,7 +35,7 @@ public class CategoryServiceImplementation implements CategoryService {
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
                         () -> new CategoryNotFoundException(
-                                "Can not get category by current url: " + categoryUrl
+                                "Can not get category by current url: " + categoryUrl + " !"
                         )
                 );
 

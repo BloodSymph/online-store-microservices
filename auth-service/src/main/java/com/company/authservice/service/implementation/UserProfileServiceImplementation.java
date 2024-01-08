@@ -4,6 +4,7 @@ import com.company.authservice.dto.profile.ProfileRequest;
 import com.company.authservice.dto.profile.ProfileResponse;
 import com.company.authservice.entity.ProfileEntity;
 import com.company.authservice.entity.UserEntity;
+import com.company.authservice.exception.InvalidVersionException;
 import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.repository.ProfileRepository;
 import com.company.authservice.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
                 .findByUser_Username(usernameFromSession)
                 .orElseThrow(
                         () -> new ProfileNotFoundException(
-                                "Can not find profile by current username: " + usernameFromSession
+                                "Can not find profile by current username: " + usernameFromSession + " !"
                         )
                 );
 
@@ -49,7 +50,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
         String usernameFromSession = getSessionUser();
 
         UserEntity user = userRepository
-                .findByUsername(usernameFromSession)
+                .findByUsernameIgnoreCase(usernameFromSession)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
                                 "Username not found!"
@@ -74,9 +75,15 @@ public class UserProfileServiceImplementation implements UserProfileService {
                 .findByUser_Username(usernameFromSession)
                 .orElseThrow(
                         () -> new ProfileNotFoundException(
-                                "Can not find profile by current username: " + usernameFromSession
+                                "Can not find profile by current username: " + usernameFromSession + " !"
                         )
                 );
+
+        if (!profileEntity.getVersion().equals(profileRequest.getVersion())) {
+            throw new InvalidVersionException(
+                    "Bad request for update! Invalid Entity Version!"
+            );
+        }
 
         profileEntity.setFirstName(profileRequest.getFirstName());
         profileEntity.setLastName(profileRequest.getLastName());
@@ -99,8 +106,8 @@ public class UserProfileServiceImplementation implements UserProfileService {
         String usernameFromSession = getSessionUser();
 
         if (!profileRepository.existsByUser_Username(usernameFromSession)) {
-            throw new UsernameNotFoundException(
-                    "User name not found!"
+            throw new ProfileNotFoundException(
+                    "Can not find user profile!"
             );
         }
 
