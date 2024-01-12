@@ -9,11 +9,12 @@ import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.repository.ProfileRepository;
 import com.company.authservice.repository.UserRepository;
 import com.company.authservice.service.UserProfileService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import static com.company.authservice.mapper.ProfileMapper.mapToProfile;
@@ -67,6 +68,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS)
     public ProfileResponse updateProfile(ProfileRequest profileRequest) {
 
         String usernameFromSession = getSessionUser();
@@ -100,7 +102,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteProfile() {
 
         String usernameFromSession = getSessionUser();

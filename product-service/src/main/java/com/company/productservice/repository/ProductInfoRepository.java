@@ -29,6 +29,16 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfoEntity, 
             @Param("productUrl") String productUrl
     );
 
-    Boolean existsByProductUrl(String productUrl);
+    @Query(
+        "SELECT product_info.product.url FROM ProductInfoEntity product_info " +
+        "WHERE EXISTS (" +
+                "SELECT product FROM ProductEntity product " +
+                "WHERE product.url " +
+                "LIKE LOWER(:productUrl) " +
+        ")"
+    )
+    Boolean existsByProductUrl(
+           @Param("productUrl") String productUrl
+    );
 
 }

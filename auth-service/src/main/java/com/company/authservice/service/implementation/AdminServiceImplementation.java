@@ -1,6 +1,5 @@
 package com.company.authservice.service.implementation;
 
-import com.company.authservice.dto.auth.SignupDto;
 import com.company.authservice.dto.profile.ProfileRequest;
 import com.company.authservice.dto.profile.ProfileResponse;
 import com.company.authservice.dto.role.RoleRequest;
@@ -14,24 +13,23 @@ import com.company.authservice.entity.UserEntity;
 import com.company.authservice.exception.InvalidVersionException;
 import com.company.authservice.exception.ProfileNotFoundException;
 import com.company.authservice.exception.RoleNotFoundException;
-import com.company.authservice.exception.UsernameIsTakenException;
 import com.company.authservice.mapper.RoleMapper;
 import com.company.authservice.mapper.UserMapper;
 import com.company.authservice.repository.ProfileRepository;
 import com.company.authservice.repository.RoleRepository;
 import com.company.authservice.repository.UserRepository;
 import com.company.authservice.service.AdminService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
-import java.util.List;
 
 import static com.company.authservice.mapper.ProfileMapper.mapToProfile;
 import static com.company.authservice.mapper.ProfileMapper.mapToProfileResponse;
@@ -193,7 +191,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteUser(String username) {
 
         if (!userRepository.existsByUsernameIgnoreCase(username)) {
@@ -253,7 +251,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteRole(String name) {
 
         if (!roleRepository.existsByNameIgnoreCase(name)) {
@@ -335,7 +333,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteProfileForUser(String username) {
 
         if (!profileRepository.existsByUser_Username(username)) {

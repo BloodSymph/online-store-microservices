@@ -25,9 +25,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             type = EntityGraph.EntityGraphType.FETCH,
             value = "user-graph-entity-with-profile-and-roles"
     )
-    @Query("SELECT user FROM UserEntity user " +
-            "WHERE user.username " +
-            "LIKE LOWER(:username) "
+    @Query(
+        "SELECT user FROM UserEntity user " +
+        "WHERE user.username " +
+        "LIKE LOWER(:username) "
     )
     Optional<UserEntity> getUserDetails(
             @Param("username") String username
