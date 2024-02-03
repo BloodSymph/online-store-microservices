@@ -197,6 +197,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public BrandAdminResponse createBrand(
             BrandRequest brandRequest, String categoryUrl) {
 
@@ -320,6 +321,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public ProductAdminResponse createProduct(
             ProductRequest productRequest,
             String categoryUrl,
@@ -399,6 +401,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public ProductInfoResponse createProductDescription(
             ProductInfoRequest productInfoRequest, String productUrl) {
 

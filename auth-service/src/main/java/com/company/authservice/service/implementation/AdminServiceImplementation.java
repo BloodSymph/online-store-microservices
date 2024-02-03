@@ -284,6 +284,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public ProfileResponse createProfileForUser(
             ProfileRequest profileRequest, String username) {
 

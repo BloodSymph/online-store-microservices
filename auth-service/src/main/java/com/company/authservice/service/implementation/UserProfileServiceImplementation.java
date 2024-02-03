@@ -44,6 +44,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
+    @Transactional
     public ProfileResponse createProfile(ProfileRequest profileRequest) {
 
         String usernameFromSession = getSessionUser();
