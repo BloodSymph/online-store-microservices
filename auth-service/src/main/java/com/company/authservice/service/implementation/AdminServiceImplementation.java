@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -88,6 +87,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public UserAdminResponse updateUserInformation(
             UserRequest userRequest, String username) {
 
@@ -120,6 +120,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public UserDetailsAdminResponse givePermissionForUser(
             String username, String name) {
 
@@ -148,6 +149,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public void removePermissionForUser(
             String username, String name) {
 
@@ -174,6 +176,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public void removeAllPermissionsForUser(String username) {
 
         UserEntity user = userRepository
@@ -191,7 +194,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteUser(String username) {
 
         if (!userRepository.existsByUsernameIgnoreCase(username)) {
@@ -225,6 +228,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public RoleResponse updateCurrentRole(
             RoleRequest roleRequest, String name) {
 
@@ -251,7 +255,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteRole(String name) {
 
         if (!roleRepository.existsByNameIgnoreCase(name)) {
@@ -301,6 +305,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    @Transactional
     public ProfileResponse updateProfileForUser(
             ProfileRequest profileRequest, String username) {
 
@@ -333,7 +338,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteProfileForUser(String username) {
 
         if (!profileRepository.existsByUser_Username(username)) {

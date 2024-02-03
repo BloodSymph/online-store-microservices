@@ -29,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -113,7 +111,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS)
+    @Transactional
     public CategoryAdminResponse updateCategory(
             CategoryRequest categoryRequest, String categoryUrl) {
 
@@ -141,7 +139,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteCategory(String categoryUrl) {
 
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {
@@ -225,7 +223,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS)
+    @Transactional
     public BrandAdminResponse updateBrand(
             BrandRequest brandRequest, String brandUrl) {
 
@@ -253,7 +251,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteBrand(String brandUrl) {
 
         if (!brandRepository.existsByUrlIgnoreCase(brandUrl)) {
@@ -357,7 +355,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS)
+    @Transactional
     public ProductAdminResponse updateProduct(
             ProductRequest productRequest, String productUrl) {
 
@@ -387,7 +385,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteProduct(String productUrl) {
 
         if (!productRepository.existsByUrlIgnoreCase(productUrl)) {
@@ -423,7 +421,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public ProductInfoResponse updateProductDescription(
             ProductInfoRequest productInfoRequest, String productUrl) {
 
@@ -466,7 +464,7 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteProductDescription(String productUrl) {
 
         if (!productInfoRepository.existsByProductUrl(productUrl)) {

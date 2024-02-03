@@ -30,7 +30,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductInfoEntity, 
     );
 
     @Query(
-        "SELECT product_info.product.url FROM ProductInfoEntity product_info " +
+        "SELECT true FROM ProductInfoEntity product_info " +
         "WHERE EXISTS (" +
                 "SELECT product FROM ProductEntity product " +
                 "WHERE product.url " +

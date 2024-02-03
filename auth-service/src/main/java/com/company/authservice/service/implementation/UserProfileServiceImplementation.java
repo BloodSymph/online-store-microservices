@@ -12,8 +12,6 @@ import com.company.authservice.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -68,7 +66,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS)
+    @Transactional
     public ProfileResponse updateProfile(ProfileRequest profileRequest) {
 
         String usernameFromSession = getSessionUser();
@@ -102,7 +100,7 @@ public class UserProfileServiceImplementation implements UserProfileService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteProfile() {
 
         String usernameFromSession = getSessionUser();

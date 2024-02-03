@@ -1,6 +1,10 @@
 package com.company.authservice.controller;
 
 import com.company.authservice.dto.auth.SignupDto;
+import com.company.authservice.dto.profile.ProfileRequest;
+import com.company.authservice.dto.profile.ProfileResponse;
+import com.company.authservice.dto.role.RoleRequest;
+import com.company.authservice.dto.role.RoleResponse;
 import com.company.authservice.dto.user.UserAdminResponse;
 import com.company.authservice.dto.user.UserDetailsAdminResponse;
 import com.company.authservice.dto.user.UserRequest;
@@ -24,10 +28,6 @@ public class AdminController {
     private final AdminService adminService;
 
     private final AuthService authService;
-
-    /*
-        User controller methods!
-    */
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
@@ -118,14 +118,123 @@ public class AdminController {
 
     }
 
+    @PostMapping("/users/{username}/remove-all-permissions")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> removeAllPermissionsFromUser(
+            @PathVariable(value = "username") String username) {
 
+        adminService.removeAllPermissionsForUser(username);
 
-    /*
-        Role controller methods!
-    */
+        return new ResponseEntity<>(
+                "Successful roles removed!", HttpStatus.OK
+        );
 
-    /*
-        Profile controller methods!
-    */
+    }
+
+    @DeleteMapping("/users/{username}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteUser(
+            @PathVariable(value = "username") String username) {
+
+        adminService.deleteUser(username);
+
+        return new ResponseEntity<>(
+                "Successful deleted!", HttpStatus.OK
+        );
+
+    }
+
+    @GetMapping("/users/{username}/profile")
+    @ResponseStatus(HttpStatus.OK)
+    public ProfileResponse getUserProfile(
+            @PathVariable(name = "username") String username) {
+
+        return adminService.getProfileOfUser(username);
+
+    }
+
+    @PostMapping("/users/{username}/create-profile")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProfileResponse createProfileForUser(
+            @PathVariable(name = "username") String username,
+            @Valid @RequestBody ProfileRequest profileRequest) {
+
+        return adminService.createProfileForUser(
+                profileRequest, username
+        );
+
+    }
+    @PutMapping("/users/{username}/update-profile")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProfileResponse updateProfileForUser(
+            @PathVariable(name = "username") String username,
+            @Valid @RequestBody ProfileRequest profileRequest) {
+
+        return adminService.updateProfileForUser(
+                profileRequest, username
+        );
+
+    }
+
+    @DeleteMapping("/users/{username}/delete-profile")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteProfileForUser(
+            @PathVariable(name = "username") String username) {
+
+        adminService.deleteProfileForUser(username);
+
+        return new ResponseEntity<>(
+                "Successful deleted!", HttpStatus.OK
+        );
+
+    }
+
+    @GetMapping("/roles")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<RoleResponse> getAllRoles(
+            @PageableDefault(
+                    sort = "name",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10
+            ) Pageable pageable) {
+
+        return adminService.getAllRoles(pageable);
+
+    }
+
+    @PostMapping("/roles/add-new-role")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoleResponse addNewRole(
+            @Valid @RequestBody RoleRequest roleRequest) {
+
+        return adminService.addNewRole(roleRequest);
+
+    }
+
+    @PutMapping("/roles/{roleName}/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoleResponse updateRole(
+            @PathVariable(name = "roleName") String roleName,
+            @Valid @RequestBody RoleRequest roleRequest) {
+
+        return adminService.updateCurrentRole(
+                roleRequest, roleName
+        );
+
+    }
+
+    @DeleteMapping("/roles/{roleName}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteRole(
+            @PathVariable(name = "roleName") String roleName) {
+
+        adminService.deleteRole(roleName);
+
+        return new ResponseEntity<>(
+                "Successful deleted!", HttpStatus.OK
+        );
+
+    }
 
 }

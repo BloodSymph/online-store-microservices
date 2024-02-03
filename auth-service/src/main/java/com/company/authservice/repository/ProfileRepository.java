@@ -32,7 +32,7 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
    );
 
    @Query(
-       "SELECT profile.user.username FROM ProfileEntity profile " +
+       "SELECT true FROM ProfileEntity profile " +
        "WHERE EXISTS (" +
                "SELECT user FROM UserEntity user " +
                 "WHERE user.username " +
