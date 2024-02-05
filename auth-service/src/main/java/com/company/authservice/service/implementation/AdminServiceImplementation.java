@@ -122,7 +122,7 @@ public class AdminServiceImplementation implements AdminService {
     @Override
     @Transactional
     public UserDetailsAdminResponse givePermissionForUser(
-            String username, String name) {
+            String username, String name, Long userVersion) {
 
         UserEntity user = userRepository
                 .getUserDetails(username)
@@ -131,6 +131,12 @@ public class AdminServiceImplementation implements AdminService {
                                 "Can not find user with current username: " + username + " !"
                         )
                 );
+
+        if (!user.getVersion().equals(userVersion)) {
+            throw new InvalidVersionException(
+                    "Bad request for giving permission! Invalid Entity Version!"
+            );
+        }
 
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(name)
@@ -151,7 +157,7 @@ public class AdminServiceImplementation implements AdminService {
     @Override
     @Transactional
     public void removePermissionForUser(
-            String username, String name) {
+            String username, String name, Long userVersion) {
 
         UserEntity user = userRepository
                 .getUserDetails(username)
@@ -160,6 +166,12 @@ public class AdminServiceImplementation implements AdminService {
                                 "Can not find user with current username: " + username + " !"
                         )
                 );
+
+        if (!user.getVersion().equals(userVersion)) {
+            throw new InvalidVersionException(
+                    "Bad request for delete permission! Invalid Entity Version!"
+            );
+        }
 
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(name)
@@ -177,7 +189,8 @@ public class AdminServiceImplementation implements AdminService {
 
     @Override
     @Transactional
-    public void removeAllPermissionsForUser(String username) {
+    public void removeAllPermissionsForUser(
+            String username, Long userVersion) {
 
         UserEntity user = userRepository
                 .findByUsernameIgnoreCase(username)
@@ -187,7 +200,13 @@ public class AdminServiceImplementation implements AdminService {
                         )
                 );
 
-        user.setRoles(Collections.emptySet());
+        if (!user.getVersion().equals(userVersion)) {
+            throw new InvalidVersionException(
+                    "Bad request for delete permissions! Invalid Entity Version!"
+            );
+        }
+
+        user.getRoles().clear();
 
         userRepository.save(user);
 

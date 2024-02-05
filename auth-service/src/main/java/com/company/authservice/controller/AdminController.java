@@ -90,26 +90,28 @@ public class AdminController {
 
     }
 
-    @PostMapping("/users/{username}/give-permission")
+    @PutMapping("/users/{username}/give-permission")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailsAdminResponse givePermissionForUser(
             @PathVariable(value = "username") String username,
+            @RequestParam(value = "userVersion") Long userVersion,
             @RequestParam(value = "name", required = true) String name) {
 
         return adminService.givePermissionForUser(
-                username, name
+                username, name, userVersion
         );
 
     }
 
-    @PostMapping("/users/{username}/remove-permission")
+    @DeleteMapping("/users/{username}/remove-permission")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> removePermissionForUser(
             @PathVariable(value = "username") String username,
+            @RequestParam(value = "userVersion") Long userVersion,
             @RequestParam(value = "name", required = true) String name) {
 
         adminService.removePermissionForUser(
-                username, name
+                username, name, userVersion
         );
 
         return new ResponseEntity<>(
@@ -118,12 +120,13 @@ public class AdminController {
 
     }
 
-    @PostMapping("/users/{username}/remove-all-permissions")
+    @DeleteMapping("/users/{username}/remove-all-permissions")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> removeAllPermissionsFromUser(
-            @PathVariable(value = "username") String username) {
+            @PathVariable(value = "username") String username,
+            @RequestParam(value = "userVersion") Long userVersion) {
 
-        adminService.removeAllPermissionsForUser(username);
+        adminService.removeAllPermissionsForUser(username, userVersion);
 
         return new ResponseEntity<>(
                 "Successful roles removed!", HttpStatus.OK

@@ -29,14 +29,16 @@ public interface AdminService {
     );
 
     UserDetailsAdminResponse givePermissionForUser(
-            String username, String name
+            String username, String name, Long userVersion
     );
 
     void removePermissionForUser(
-            String username, String name
+            String username, String name, Long userVersion
     );
 
-    void removeAllPermissionsForUser(String username);
+    void removeAllPermissionsForUser(
+            String username, Long userVersion
+    );
 
     void deleteUser(String username);
 
