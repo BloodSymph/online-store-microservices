@@ -8,12 +8,12 @@ import com.company.productservice.mapper.ProductMapper;
 import com.company.productservice.repository.ProductRepository;
 import com.company.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static com.company.productservice.mapper.ProductMapper.mapToProductDetailsResponse;
-import static com.company.productservice.mapper.ProductMapper.mapToProductResponse;
 
 @Service
 @RequiredArgsConstructor

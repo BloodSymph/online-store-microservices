@@ -7,6 +7,7 @@ import com.company.productservice.mapper.BrandMapper;
 import com.company.productservice.repository.BrandRepository;
 import com.company.productservice.service.BrandService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

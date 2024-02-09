@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  discovery-server:
+    build: ./discovery-server/
+    container_name: 'discovery-server'
+    ports:
+      - "8761:8761"
+    image: 'discovery-server'
+
+  config-server:
+    build: ./config-server/
+    container_name: 'config-server'
+    ports:
+      - "8888:8888"
+    image: 'config-server'
+
+  api-gateway:
+    build: ./api-gateway/
+    container_name: 'api-gateway'
+    ports:
+      - "8222:8222"
+    image: 'api-gateway'
+
+

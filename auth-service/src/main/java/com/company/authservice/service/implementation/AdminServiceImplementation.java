@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.Collections;
 
 import static com.company.authservice.mapper.ProfileMapper.mapToProfile;
 import static com.company.authservice.mapper.ProfileMapper.mapToProfileResponse;
