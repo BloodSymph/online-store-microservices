@@ -28,4 +28,6 @@ public interface ProductService {
             Pageable pageable
     );
 
+    ProductResponse getProductByIdForCart(Long productId);
+
 }

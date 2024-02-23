@@ -2,14 +2,12 @@ package com.company.cartservice.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -34,11 +32,10 @@ public class CartEntity {
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
-    //Relation OneToOne with User or UserProfile entities
+    @Column(name = "product_id", nullable = false, unique = true)
+    private Long productId;
 
-    //Relation OneToMany with CartProducts entity
-
-
-
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
 
 }

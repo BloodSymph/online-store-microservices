@@ -79,4 +79,16 @@ public class ProductServiceImplementation implements ProductService {
 
     }
 
+    @Override
+    public ProductResponse getProductByIdForCart(Long productId) {
+        return productRepository
+                .findById(productId)
+                .map(ProductMapper::mapToProductResponse)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not get product by id: " + productId + " !"
+                        )
+                );
+    }
+
 }

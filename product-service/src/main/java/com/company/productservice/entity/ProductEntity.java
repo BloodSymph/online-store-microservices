@@ -29,6 +29,7 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
 
     @Column(name = "product_name")
@@ -51,13 +52,14 @@ public class ProductEntity {
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
-    // Rating Service connection
+    @Column(name = "cart_id")
+    private Long cartId;
 
-    // Cart Service connection
+    // Rating Service connection
 
     // Review Service connection
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
     private ProductInfoEntity productInfo;
 
     @ManyToOne

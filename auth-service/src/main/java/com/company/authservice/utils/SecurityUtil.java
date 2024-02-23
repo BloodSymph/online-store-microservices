@@ -15,10 +15,13 @@ public class SecurityUtil {
                 .getAuthentication();
 
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
             return authentication.getName();
+
         }
 
         return null;
+
     }
 
 }

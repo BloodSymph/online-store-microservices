@@ -96,4 +96,13 @@ public class ProductController {
 
     }
 
+    @GetMapping("/products/{productId}/get")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductResponse getProductForAddToTheCart(
+            @PathVariable(name = "productId") Long productId) {
+
+        return  productService.getProductByIdForCart(productId);
+
+    }
+
 }
